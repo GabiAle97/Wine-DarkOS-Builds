@@ -667,15 +667,8 @@ else
 fi
 
 export XZ_OPT="-9"
-read
-if [ "${EXPERIMENTAL_WOW64}" = "true" ]; then
-    mkdir results
-	mv wine-${BUILD_NAME}-amd64 results/wine
-    build="wine-${BUILD_NAME}-exp-wow64-amd64"
-else
-    builds_list="wine-${BUILD_NAME}-x86 results/wine"
-	build="wine-${BUILD_NAME}-amd64"
-fi
+mkdir results
+mv wine-${BUILD_NAME}-amd64 results/wine
 
 if [ -d "results/wine" ]; then
     rm -rf results/wine/include results/wine/share/applications results/wine/share/man
@@ -684,8 +677,8 @@ if [ -d "results/wine" ]; then
         cp results/wine/wine-tkg-config.txt results/wine
     fi
     cd results
-    tar -Jcf "${build}".tar.xz wine
-    mv "${build}".tar.xz "${result_dir}"
+    tar -Jcf "wine-action-${WINE_BRANCH}".tar.xz wine
+    mv "wine-action-${WINE_BRANCH}".tar.xz "${result_dir}"
     cd -
 fi
 
