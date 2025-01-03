@@ -27,7 +27,8 @@ jobs:
           chmod +x build_wine.sh
           WINE_BRANCH=proton PROTON_BRANCH=bleeding-edge ./build_wine.sh
           sha256sum *.tar.xz
-      - uses: actions/upload-artifact@v3
+      - uses: softprops/action-gh-release@v2
         with:
-          name: Proton Experimental WoW64
-          path: ./*.tar.xz
+          name: Proton
+          files: |
+            ./wine-action-proton.tar.xz

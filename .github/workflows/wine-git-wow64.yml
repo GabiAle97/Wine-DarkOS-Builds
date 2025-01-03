@@ -32,4 +32,4 @@ jobs:
         with:
           name: Staging
           files: |
-            ./wine-action-proton.tar.xz
+            ./wine-action-staging.tar.xz
