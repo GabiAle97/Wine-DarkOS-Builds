@@ -25,10 +25,7 @@ jobs:
           sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf
           sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz"
           chmod +x build_wine.sh
-          export TERMUX_GLIBC="true"
-          export EXPERIMENTAL_WOW64="true"
           export WINE_VERSION="git"
-          #WINE_BRANCH=vanilla ./build_wine.sh
           WINE_BRANCH=staging ./build_wine.sh
           sha256sum *.tar.xz
       - uses: actions/upload-artifact@v3

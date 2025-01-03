@@ -1,14 +1,5 @@
-From 3e4aa0231f6279ba699c4a4097e3bb087de90f41 Mon Sep 17 00:00:00 2001
-From: brunodev85 <root@DESKTOP-J1LK36I>
-Date: Tue, 18 Jun 2024 13:51:04 -0300
-Subject: [PATCH] iphlpapi: Add option to read adapters info from file
-
----
- dlls/iphlpapi/iphlpapi_main.c | 459 ++++++++++++++++++++++++----------
- 1 file changed, 330 insertions(+), 129 deletions(-)
-
 diff --git a/dlls/iphlpapi/iphlpapi_main.c b/dlls/iphlpapi/iphlpapi_main.c
-index 9c7582b7..aaeb34d3 100755
+index 172afbd62b8..d69ce83f829 100644
 --- a/dlls/iphlpapi/iphlpapi_main.c
 +++ b/dlls/iphlpapi/iphlpapi_main.c
 @@ -44,9 +44,18 @@
@@ -30,7 +21,7 @@ index 9c7582b7..aaeb34d3 100755
  DWORD WINAPI AllocateAndGetIpAddrTableFromStack( MIB_IPADDRTABLE **table, BOOL sort, HANDLE heap, DWORD flags );
  
  static const NPI_MODULEID *ip_module_id( USHORT family )
-@@ -220,6 +229,61 @@ DWORD WINAPI CreateProxyArpEntry(DWORD dwAddress, DWORD dwMask, DWORD dwIfIndex)
+@@ -220,6 +229,62 @@ DWORD WINAPI CreateProxyArpEntry(DWORD dwAddress, DWORD dwMask, DWORD dwIfIndex)
    return ERROR_NOT_SUPPORTED;
  }
  
@@ -89,10 +80,11 @@ index 9c7582b7..aaeb34d3 100755
 +    return adapters_info;
 +}
 +
++
  static char *debugstr_ipv6(const struct sockaddr_in6 *sin, char *buf)
  {
      const IN6_ADDR *addr = &sin->sin6_addr;
-@@ -595,140 +659,195 @@ static void ip_addr_string_init( IP_ADDR_STRING *s, const IN_ADDR *addr, const I
+@@ -595,140 +660,191 @@ static void ip_addr_string_init( IP_ADDR_STRING *s, const IN_ADDR *addr, const I
   */
  DWORD WINAPI GetAdaptersInfo( IP_ADAPTER_INFO *info, ULONG *size )
  {
@@ -107,10 +99,9 @@ index 9c7582b7..aaeb34d3 100755
 -    SOCKADDR_INET *wins_servers = NULL;
 -    IP_ADDR_STRING *extra_ip_addrs, *cursor;
 -    IN_ADDR gw, mask;
--
 +    int adapter_info_size;
 +    struct adapter_info *adapters_info;
-+    
+ 
      TRACE( "info %p, size %p\n", info, size );
 -    if (!size) return ERROR_INVALID_PARAMETER;
 -
@@ -171,15 +162,20 @@ index 9c7582b7..aaeb34d3 100755
 +        
 +        free( adapters_info );
 +        info[-1].Next = NULL;
-+        return 0;
++        return 0;        
      }
 -
 -    if (!if_num)
-+    else 
++    else
      {
 -        err = ERROR_NO_DATA;
 -        goto err;
 -    }
+-
+-    err = NsiAllocateAndGetTable( 1, &NPI_MS_IPV4_MODULEID, NSI_IP_UNICAST_TABLE,
+-                                  (void **)&uni_keys, sizeof(*uni_keys), (void **)&uni_rw, sizeof(*uni_rw),
+-                                  NULL, 0, NULL, 0, &uni_count, 0 );
+-    if (err) goto err;
 +        DWORD err, if_count, if_num = 0, uni_count, fwd_count, needed, wins_server_count;
 +        DWORD len, i, uni, fwd;
 +        NET_LUID *if_keys = NULL;
@@ -196,24 +192,25 @@ index 9c7582b7..aaeb34d3 100755
 +                                      (void **)&if_keys, sizeof(*if_keys), (void **)&if_rw, sizeof(*if_rw),
 +                                      NULL, 0, (void **)&if_stat, sizeof(*if_stat), &if_count, 0 );
  
--    err = NsiAllocateAndGetTable( 1, &NPI_MS_IPV4_MODULEID, NSI_IP_UNICAST_TABLE,
--                                  (void **)&uni_keys, sizeof(*uni_keys), (void **)&uni_rw, sizeof(*uni_rw),
--                                  NULL, 0, NULL, 0, &uni_count, 0 );
--    if (err) goto err;
+-    /* Slightly overestimate the needed size by assuming that all
+-       unicast addresses require a separate IP_ADDR_STRING. */
 +        if (err) return err;
 +        for (i = 0; i < if_count; i++)
 +        {
 +            if (if_stat[i].type == IF_TYPE_SOFTWARE_LOOPBACK) continue;
 +            if_num++;
 +        }
- 
--    /* Slightly overestimate the needed size by assuming that all
--       unicast addresses require a separate IP_ADDR_STRING. */
 +        if (!if_num)
 +        {
 +            err = ERROR_NO_DATA;
 +            goto err;
 +        }
++        err = NsiAllocateAndGetTable( 1, &NPI_MS_IPV4_MODULEID, NSI_IP_UNICAST_TABLE,
++                                      (void **)&uni_keys, sizeof(*uni_keys), (void **)&uni_rw, sizeof(*uni_rw),
++                                      NULL, 0, NULL, 0, &uni_count, 0 );
++        if (err) goto err;
++        /* Slightly overestimate the needed size by assuming that all
++        unicast addresses require a separate IP_ADDR_STRING. */
  
 -    needed = if_num * sizeof(*info) + uni_count * sizeof(IP_ADDR_STRING);
 -    if (!info || *size < needed)
@@ -222,19 +219,6 @@ index 9c7582b7..aaeb34d3 100755
 -        err = ERROR_BUFFER_OVERFLOW;
 -        goto err;
 -    }
-+        err = NsiAllocateAndGetTable( 1, &NPI_MS_IPV4_MODULEID, NSI_IP_UNICAST_TABLE,
-+                                      (void **)&uni_keys, sizeof(*uni_keys), (void **)&uni_rw, sizeof(*uni_rw),
-+                                      NULL, 0, NULL, 0, &uni_count, 0 );
-+        if (err) goto err;
- 
--    err = NsiAllocateAndGetTable( 1, &NPI_MS_IPV4_MODULEID, NSI_IP_FORWARD_TABLE,
--                                  (void **)&fwd_keys, sizeof(*fwd_keys), NULL, 0,
--                                  NULL, 0, NULL, 0, &fwd_count, 0 );
--    if (err) goto err;
-+        /* Slightly overestimate the needed size by assuming that all
-+           unicast addresses require a separate IP_ADDR_STRING. */
- 
--    wins_server_count = get_wins_servers( &wins_servers );
 +        needed = if_num * sizeof(*info) + uni_count * sizeof(IP_ADDR_STRING);
 +        if (!info || *size < needed)
 +        {
@@ -242,6 +226,18 @@ index 9c7582b7..aaeb34d3 100755
 +            err = ERROR_BUFFER_OVERFLOW;
 +            goto err;
 +        }
+ 
+-    err = NsiAllocateAndGetTable( 1, &NPI_MS_IPV4_MODULEID, NSI_IP_FORWARD_TABLE,
+-                                  (void **)&fwd_keys, sizeof(*fwd_keys), NULL, 0,
+-                                  NULL, 0, NULL, 0, &fwd_count, 0 );
+-    if (err) goto err;
++        err = NsiAllocateAndGetTable( 1, &NPI_MS_IPV4_MODULEID, NSI_IP_FORWARD_TABLE,
++                                      (void **)&fwd_keys, sizeof(*fwd_keys), NULL, 0,
++                                      NULL, 0, NULL, 0, &fwd_count, 0 );
++        if (err) goto err;
+ 
+-    wins_server_count = get_wins_servers( &wins_servers );
++        wins_server_count = get_wins_servers( &wins_servers );
  
 -    extra_ip_addrs = (IP_ADDR_STRING *)(info + if_num);
 -    for (i = 0; i < if_count; i++)
@@ -265,13 +261,6 @@ index 9c7582b7..aaeb34d3 100755
 -
 -        cursor = NULL;
 -        for (uni = 0; uni < uni_count; uni++)
-+        err = NsiAllocateAndGetTable( 1, &NPI_MS_IPV4_MODULEID, NSI_IP_FORWARD_TABLE,
-+                                      (void **)&fwd_keys, sizeof(*fwd_keys), NULL, 0,
-+                                      NULL, 0, NULL, 0, &fwd_count, 0 );
-+        if (err) goto err;
-+
-+        wins_server_count = get_wins_servers( &wins_servers );
-+
 +        extra_ip_addrs = (IP_ADDR_STRING *)(info + if_num);
 +        for (i = 0; i < if_count; i++)
          {
@@ -318,37 +307,14 @@ index 9c7582b7..aaeb34d3 100755
 -            mask.s_addr = INADDR_ANY;
 -            ip_addr_string_init( &info->IpAddressList, &mask, &mask, 0 );
 -        }
--
--        gw.s_addr = INADDR_ANY;
--        mask.s_addr = INADDR_NONE;
--        for (fwd = 0; fwd < fwd_count; fwd++)
--        { /* find the first router on this interface */
--            if (fwd_keys[fwd].luid.Value == if_keys[i].Value &&
--                fwd_keys[fwd].next_hop.s_addr != INADDR_ANY &&
--                !fwd_keys[fwd].prefix_len)
 +            if (!cursor)
-             {
--                gw = fwd_keys[fwd].next_hop;
--                break;
++            {
 +                mask.s_addr = INADDR_ANY;
 +                ip_addr_string_init( &info->IpAddressList, &mask, &mask, 0 );
-             }
--        }
--        ip_addr_string_init( &info->GatewayList, &gw, &mask, 0 );
--
--        ip_addr_string_init( &info->DhcpServer, NULL, NULL, 0 );
- 
--        info->HaveWins = !!wins_server_count;
--        ip_addr_string_init( &info->PrimaryWinsServer, NULL, NULL, 0 );
--        ip_addr_string_init( &info->SecondaryWinsServer, NULL, NULL, 0 );
--        if (info->HaveWins)
--        {
++            }
 +            gw.s_addr = INADDR_ANY;
-             mask.s_addr = INADDR_NONE;
--            ip_addr_string_init( &info->PrimaryWinsServer, &wins_servers[0].Ipv4.sin_addr, &mask, 0 );
--            if (wins_server_count > 1)
--                ip_addr_string_init( &info->SecondaryWinsServer, &wins_servers[1].Ipv4.sin_addr, &mask, 0 );
--        }
++            mask.s_addr = INADDR_NONE;
++            
 +            for (fwd = 0; fwd < fwd_count; fwd++)
 +            { /* find the first router on this interface */
 +                if (fwd_keys[fwd].luid.Value == if_keys[i].Value &&
@@ -360,30 +326,52 @@ index 9c7582b7..aaeb34d3 100755
 +                }
 +            }
 +            ip_addr_string_init( &info->GatewayList, &gw, &mask, 0 );
- 
--        info->LeaseObtained = 0;
--        info->LeaseExpires = 0;
 +            ip_addr_string_init( &info->DhcpServer, NULL, NULL, 0 );
  
--        info++;
--    }
--    info[-1].Next = NULL;
+-        gw.s_addr = INADDR_ANY;
+-        mask.s_addr = INADDR_NONE;
+-        for (fwd = 0; fwd < fwd_count; fwd++)
+-        { /* find the first router on this interface */
+-            if (fwd_keys[fwd].luid.Value == if_keys[i].Value &&
+-                fwd_keys[fwd].next_hop.s_addr != INADDR_ANY &&
+-                !fwd_keys[fwd].prefix_len)
 +            info->HaveWins = !!wins_server_count;
 +            ip_addr_string_init( &info->PrimaryWinsServer, NULL, NULL, 0 );
 +            ip_addr_string_init( &info->SecondaryWinsServer, NULL, NULL, 0 );
 +            if (info->HaveWins)
-+            {
+             {
+-                gw = fwd_keys[fwd].next_hop;
+-                break;
 +                mask.s_addr = INADDR_NONE;
 +                ip_addr_string_init( &info->PrimaryWinsServer, &wins_servers[0].Ipv4.sin_addr, &mask, 0 );
 +                if (wins_server_count > 1)
 +                    ip_addr_string_init( &info->SecondaryWinsServer, &wins_servers[1].Ipv4.sin_addr, &mask, 0 );
-+            }
-+
+             }
+-        }
+-        ip_addr_string_init( &info->GatewayList, &gw, &mask, 0 );
+ 
+-        ip_addr_string_init( &info->DhcpServer, NULL, NULL, 0 );
 +            info->LeaseObtained = 0;
 +            info->LeaseExpires = 0;
-+
+ 
+-        info->HaveWins = !!wins_server_count;
+-        ip_addr_string_init( &info->PrimaryWinsServer, NULL, NULL, 0 );
+-        ip_addr_string_init( &info->SecondaryWinsServer, NULL, NULL, 0 );
+-        if (info->HaveWins)
+-        {
+-            mask.s_addr = INADDR_NONE;
+-            ip_addr_string_init( &info->PrimaryWinsServer, &wins_servers[0].Ipv4.sin_addr, &mask, 0 );
+-            if (wins_server_count > 1)
+-                ip_addr_string_init( &info->SecondaryWinsServer, &wins_servers[1].Ipv4.sin_addr, &mask, 0 );
 +            info++;
-+        }
+         }
+-
+-        info->LeaseObtained = 0;
+-        info->LeaseExpires = 0;
+-
+-        info++;
+-    }
+-    info[-1].Next = NULL;
 +        info[-1].Next = NULL;
  
  err:
@@ -401,21 +389,21 @@ index 9c7582b7..aaeb34d3 100755
  }
  
  static void address_entry_free( void *ptr, ULONG offset, void *ctxt )
-@@ -1288,27 +1407,109 @@ static DWORD adapters_addresses_alloc( ULONG family, ULONG flags, IP_ADAPTER_ADD
+@@ -1322,34 +1438,110 @@ err:
  ULONG WINAPI DECLSPEC_HOTPATCH GetAdaptersAddresses( ULONG family, ULONG flags, void *reserved,
                                                       IP_ADAPTER_ADDRESSES *aa, ULONG *size )
  {
--    IP_ADAPTER_ADDRESSES *info;
--    DWORD err, needed;
+-    IP_ADAPTER_ADDRESSES *info, **sorted;
+-    DWORD err, needed, count;
 -
 +    int adapter_info_size;
 +    struct adapter_info *adapters_info; 
-+    
++ 
      TRACE( "(%ld, %08lx, %p, %p, %p)\n", family, flags, reserved, aa, size );
  
 -    if (!size) return ERROR_INVALID_PARAMETER;
 -
--    err = adapters_addresses_alloc( family, flags, &info );
+-    err = adapters_addresses_alloc( family, flags, &info, &count );
 -    if (err) return err;
 -
 -    needed = adapters_addresses_size( info );
@@ -500,27 +488,31 @@ index 9c7582b7..aaeb34d3 100755
 +        aa[-1].Next = NULL;
 +        return 0;
      }
--    else
--        adapters_addresses_copy( aa, info );
-+    else 
-+    {
-+        IP_ADAPTER_ADDRESSES *info;
-+        DWORD err, needed;
-+    
-+        err = adapters_addresses_alloc( family, flags, &info );
+     else
+     {
+-        if (!(sorted = adapters_addresses_sort( info, count ))) err = ERROR_OUTOFMEMORY;
+-        else
++        IP_ADAPTER_ADDRESSES *info, **sorted;
++        DWORD err, needed, count;
++        err = adapters_addresses_alloc( family, flags, &info, &count );
 +        if (err) return err;
++        needed = adapters_addresses_size( info );
++        if (!aa || *size < needed)
+         {
+-            adapters_addresses_copy( aa, sorted, count );
+-            heap_free( sorted );
++            *size = needed;
++            err = ERROR_BUFFER_OVERFLOW;
+         }
+-    }
++        else
++            if (!(sorted = adapters_addresses_sort( info, count ))) err = ERROR_OUTOFMEMORY;
++            else
++                adapters_addresses_copy( aa, sorted, count );
++                heap_free( sorted );
  
 -    adapters_addresses_free( info );
 -    return err;
-+        needed = adapters_addresses_size( info );
-+        if (!aa || *size < needed)
-+        {
-+            *size = needed;
-+            err = ERROR_BUFFER_OVERFLOW;
-+        }
-+        else
-+            adapters_addresses_copy( aa, info );
-+
 +        adapters_addresses_free( info );
 +        return err;
 +    }

@@ -23,8 +23,6 @@ jobs:
           sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf
           sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz"
           chmod +x build_wine.sh
-          export TERMUX_GLIBC="true"
-          export EXPERIMENTAL_WOW64="true"
           export WINE_VERSION="$(wget -q -O - "https://raw.githubusercontent.com/Kron4ek/wine-tkg/master/VERSION" | tail -c +14)"
           WINE_BRANCH=staging-tkg ./build_wine.sh
           sha256sum *.tar.xz

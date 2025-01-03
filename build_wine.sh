@@ -46,12 +46,12 @@ export STAGING_VERSION="${STAGING_VERSION:-}"
 
 #######################################################################
 # If you're building specifically for Termux glibc, set this to true.
-export TERMUX_GLIBC="${TERMUX_GLIBC:-false}"
+export TERMUX_GLIBC="true"
 
 # If you want to build Wine for proot/chroot, set this to true.
 # It will incorporate address space adjustment which might improve
 # compatibility. ARM CPUs are limited in this case.
-export TERMUX_PROOT="${TERMUX_PROOT:-false}"
+export TERMUX_PROOT="false"
 
 # These two variables cannot be "true" at the same time, otherwise Wine
 # will not build. Select only one which is appropriate to you.
@@ -65,7 +65,7 @@ export TERMUX_PROOT="${TERMUX_PROOT:-false}"
 export STAGING_ARGS="${STAGING_ARGS:-}"
 
 # Make 64-bit Wine builds with the new WoW64 mode (32-on-64)
-export EXPERIMENTAL_WOW64="${EXPERIMENTAL_WOW64:-false}"
+export EXPERIMENTAL_WOW64="true"
 
 # Set this to a path to your Wine source code (for example, /home/username/wine-custom-src).
 # This is useful if you already have the Wine source code somewhere on your
@@ -215,9 +215,6 @@ fi
 # Prints out which environment you are building Wine for.
 # Easier to debug script errors.
 
-if [ "$TERMUX_PROOT" = "true" ]; then
-   echo "Building Wine for proot/chroot environment"
-fi
 if [ "$TERMUX_GLIBC" = "true" ]; then
    echo "Building Wine for glibc native environment"
 fi
@@ -395,14 +392,6 @@ fi
     STAGING_ARGS="eventfd_synchronization winecfg_Staging"
    elif [ "$TERMUX_GLIBC" = "true" ] && [ "${WINE_BRANCH}" = "vanilla" ]; then
     STAGING_ARGS="eventfd_synchronization winecfg_Staging"
-   elif [ "$TERMUX_PROOT" = "true" ] && [ "${WINE_BRANCH}" = "vanilla" ]; then
-    STAGING_ARGS="eventfd_synchronization winecfg_Staging"
-   elif [ "$TERMUX_PROOT" = "true" ] && [ "${WINE_BRANCH}" = "staging" ]; then
-    STAGING_ARGS="--all -W ntdll-Syscall_Emulation"
-   elif [ "$TERMUX_PROOT" = "true" ] && [ "$WINE_BRANCH" = "staging" ] && [ "${EXPERIMENTAL_WOW64}" = "true" ]; then
-    STAGING_ARGS="--all -W ntdll-Syscall_Emulation"
-   elif [ "$TERMUX_PROOT" = "true" ] && [ "$WINE_BRANCH" = "vanilla" ] && [ "${EXPERIMENTAL_WOW64}" = "true" ]; then
-    STAGING_ARGS="eventfd_synchronization winecfg_Staging"
     fi
 
 		cd wine || exit 1
@@ -421,23 +410,6 @@ fi
 cd "${BUILD_DIR}" || exit 1
 fi
 
-if [ "$TERMUX_PROOT" = "true" ]; then
-    if [ "$WINE_BRANCH" = "staging" ] || [ "$WINE_BRANCH" = "staging-tkg" ] || [ "$WINE_BRANCH" = "proton" ]; then
-    echo "Applying address patch to proot/chroot Wine build..."
-    patch -d wine -Np1 < "${scriptdir}"/address-space-proot.patch || {
-        echo "Error: Failed to apply one or more patches."
-        exit 1
-    }
-    clear
-    elif [ "$WINE_BRANCH" = "vanilla" ]; then
-    echo "Applying address patch to proot/chroot Wine build..."
-    patch -d wine -Np1 < "${scriptdir}"/address-space-proot.patch || {
-        echo "Error: Failed to apply one or more patches."
-        exit 1
-    }
-    clear
-fi
-fi
 
 # Checks which Wine branch you are building and applies additional convenient patches.
 # Staging-tkg part isn't finished and will not build if it's Wine 9.4 and lower.
@@ -510,22 +482,22 @@ if [ "$TERMUX_GLIBC" = "true" ]; then
 fi
 fi
     
-## NDIS patch for fixing crappy Android's SELinux limitations.
-#if [ "$TERMUX_GLIBC" = "true" ]; then
-#echo "Circumventing crappy SELinux's limitations... (Thanks BrunoSX)"
-#patch -d wine -Np1 < "${scriptdir}"/ndis.patch || {
-#        echo "Error: Failed to apply one or more patches."
-#        exit 1
-#    }
-#    clear
-#else
-#echo "Circumventing crappy SELinux's limitations... (Thanks BrunoSX)"
-#patch -d wine -Np1 < "${scriptdir}"/ndis-proot.patch || {
-#        echo "Error: Failed to apply one or more patches."
-#        exit 1
-#    }
-#    clear
-#fi
+# NDIS patch for fixing crappy Android's SELinux limitations.
+if [ "$TERMUX_GLIBC" = "true" ]; then
+echo "Circumventing crappy SELinux's limitations... (Thanks BrunoSX)"
+patch -d wine -Np1 < "${scriptdir}"/ndis.patch || {
+        echo "Error: Failed to apply one or more patches."
+        exit 1
+    }
+    clear
+else
+echo "Circumventing crappy SELinux's limitations... (Thanks BrunoSX)"
+patch -d wine -Np1 < "${scriptdir}"/ndis-proot.patch || {
+        echo "Error: Failed to apply one or more patches."
+        exit 1
+    }
+    clear
+fi
 
 if [ ! -d wine ]; then
 	clear
@@ -550,19 +522,24 @@ patch -p1 -R < "${scriptdir}"/inputbridgefix.patch || {
    clear
 fi
 
-#echo "Applying CPU topology patch"
-#if [ "$WINE_BRANCH" = "staging" ]; then
-#patch -p1 < "${scriptdir}"/wine-cpu-topology-wine-9.22.patch || {
-#        echo "Error: Failed to revert one or two patches. Stopping."
-#        exit 1
-#    }
-#   clear
-#elif [ "WINE_BRANCH" = "staging-tkg" ]; then
-#patch -p1 < "${scriptdir}"/wine-cpu-topology-tkg.patch || {
-#        echo "Error: Failed to apply one or two patches. Stopping."
-#        exit 1
-#    }
-#fi
+echo "Applying CPU topology patch"
+if [ "$WINE_BRANCH" == "staging" ]; then
+patch -p1 < "${scriptdir}"/wine-cpu-topology-wine-9.22.patch || {
+        echo "Error: Failed to revert one or two patches. Stopping."
+        exit 1
+    }
+   clear
+elif [ "$WINE_BRANCH" == "staging-tkg" ]; then
+patch -p1 < "${scriptdir}"/wine-cpu-topology-tkg.patch || {
+        echo "Error: Failed to apply one or two patches. Stopping."
+        exit 1
+    }
+else
+patch -p1 < "${scriptdir}"/wine-cpu-topology-9.22.patch || {
+        echo "Error: Failed to apply one or two patches. Stopping."
+        exit 1
+    }
+fi
 
 ### Experimental addition to address space hackery
 if [ "$TERMUX_GLIBC" = "true" ]; then
@@ -687,25 +664,21 @@ fi
 export XZ_OPT="-9"
 
 if [ "${EXPERIMENTAL_WOW64}" = "true" ]; then
-	mv wine-${BUILD_NAME}-amd64 wine-${BUILD_NAME}-exp-wow64-amd64
+	mv wine-${BUILD_NAME}-amd64 wine
 
-	builds_list="wine-${BUILD_NAME}-exp-wow64-amd64"
-else
-	builds_list="wine-${BUILD_NAME}-x86 wine-${BUILD_NAME}-amd64"
+	build="wine-${BUILD_NAME}-exp-wow64-amd64"
 fi
 
-for build in ${builds_list}; do
-	if [ -d "${build}" ]; then
-		rm -rf "${build}"/include "${build}"/share/applications "${build}"/share/man
+if [ -d "wine" ]; then
+    rm -rf wine/include wine/share/applications wine/share/man
 
-		if [ -f wine/wine-tkg-config.txt ]; then
-			cp wine/wine-tkg-config.txt "${build}"
-		fi
+    if [ -f wine/wine-tkg-config.txt ]; then
+        cp wine/wine-tkg-config.txt wine
+    fi
 
-		tar -Jcf "${build}".tar.xz "${build}"
-		mv "${build}".tar.xz "${result_dir}"
-	fi
-done
+    tar -Jcf "${build}".tar.xz wine
+    mv "${build}".tar.xz "${result_dir}"
+fi
 
 rm -rf "${BUILD_DIR}"
 
