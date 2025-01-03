@@ -98,6 +98,9 @@ export WINE_BUILD_OPTIONS="--disable-winemenubuilder --disable-win16 --enable-wi
 # This directory is removed and recreated on each script run.
 export BUILD_DIR="${HOME}"/build_wine
 
+echo "$WINE_BRANCH"
+echo "$PROTON_BRANCH"
+
 # Implement a new WoW64 specific check which will change the way Wine is built.
 # New WoW64 builds will use a different bootstrap which require different
 # variables and they are not compatible with old WoW64 build mode.
@@ -483,7 +486,7 @@ fi
 fi
     
 # NDIS patch for fixing crappy Android's SELinux limitations.
-if [ "$TERMUX_GLIBC" = "true" ]; then
+if [ "$WINE_BRANCH" != "proton" ]; then
 echo "Circumventing crappy SELinux's limitations... (Thanks BrunoSX)"
 patch -d wine -Np1 < "${scriptdir}"/ndis.patch || {
         echo "Error: Failed to apply one or more patches."
@@ -492,7 +495,7 @@ patch -d wine -Np1 < "${scriptdir}"/ndis.patch || {
     clear
 else
 echo "Circumventing crappy SELinux's limitations... (Thanks BrunoSX)"
-patch -d wine -Np1 < "${scriptdir}"/ndis-proot.patch || {
+patch -d wine -Np1 < "${scriptdir}"/ndis_proton.patch || {
         echo "Error: Failed to apply one or more patches."
         exit 1
     }
@@ -534,15 +537,17 @@ patch -p1 < "${scriptdir}"/wine-cpu-topology-tkg.patch || {
         echo "Error: Failed to apply one or two patches. Stopping."
         exit 1
     }
-else
-patch -p1 < "${scriptdir}"/wine-cpu-topology-9.22.patch || {
-        echo "Error: Failed to apply one or two patches. Stopping."
-        exit 1
-    }
 fi
 
 ### Experimental addition to address space hackery
-if [ "$TERMUX_GLIBC" = "true" ]; then
+if [ "$WINE_BRANCH" = "proton" ]; then
+echo "Applying additional address space patch... (credits to Bylaws)"
+patch -p1 < "${scriptdir}"/wine-virtual-memory-proton.patch || {
+        echo "This patch did not apply. Stopping..."
+	exit 1
+    }
+    clear
+else
 echo "Applying additional address space patch... (credits to Bylaws)"
 patch -p1 < "${scriptdir}"/wine-virtual-memory.patch || {
         echo "This patch did not apply. Stopping..."
@@ -662,22 +667,26 @@ else
 fi
 
 export XZ_OPT="-9"
-
+read
 if [ "${EXPERIMENTAL_WOW64}" = "true" ]; then
-	mv wine-${BUILD_NAME}-amd64 wine
-
-	build="wine-${BUILD_NAME}-exp-wow64-amd64"
+    mkdir results
+	mv wine-${BUILD_NAME}-amd64 results/wine
+    build="wine-${BUILD_NAME}-exp-wow64-amd64"
+else
+    builds_list="wine-${BUILD_NAME}-x86 results/wine"
+	build="wine-${BUILD_NAME}-amd64"
 fi
 
-if [ -d "wine" ]; then
-    rm -rf wine/include wine/share/applications wine/share/man
+if [ -d "results/wine" ]; then
+    rm -rf results/wine/include results/wine/share/applications results/wine/share/man
 
     if [ -f wine/wine-tkg-config.txt ]; then
-        cp wine/wine-tkg-config.txt wine
+        cp results/wine/wine-tkg-config.txt results/wine
     fi
-
+    cd results
     tar -Jcf "${build}".tar.xz wine
     mv "${build}".tar.xz "${result_dir}"
+    cd -
 fi
 
 rm -rf "${BUILD_DIR}"
