@@ -29,6 +29,6 @@ jobs:
           sha256sum *.tar.xz
       - uses: softprops/action-gh-release@v2
         with:
-          name: Proton
+          tag_name: Proton
           files: |
             ./wine-action-proton.tar.xz

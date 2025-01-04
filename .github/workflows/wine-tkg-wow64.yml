@@ -26,7 +26,8 @@ jobs:
           export WINE_VERSION="$(wget -q -O - "https://raw.githubusercontent.com/Kron4ek/wine-tkg/master/VERSION" | tail -c +14)"
           WINE_BRANCH=staging-tkg ./build_wine.sh
           sha256sum *.tar.xz
-      - uses: actions/upload-artifact@v3
+      - uses: softprops/action-gh-release@v2
         with:
-          name: Wine-Staging-TKG-WoW64
-          path: ./*.tar.xz
+          tag_name: Staging
+          files: |
+            ./wine-action-staging-tkg.tar.xz

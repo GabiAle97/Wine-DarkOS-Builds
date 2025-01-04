@@ -30,6 +30,6 @@ jobs:
           sha256sum *.tar.xz
       - uses: softprops/action-gh-release@v2
         with:
-          name: Staging
+          tag_name: Staging
           files: |
             ./wine-action-staging.tar.xz
