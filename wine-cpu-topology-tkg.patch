@@ -337,15 +337,15 @@ index f90616b..8b1b5d2 100644
      TRACE( "<- CPU arch %d, level %d, rev %d, features 0x%x\n",
             (int)cpu_info.ProcessorArchitecture, (int)cpu_info.ProcessorLevel,
 diff --git a/dlls/ntdll/unix/thread.c b/dlls/ntdll/unix/thread.c
-index 3909470..80488ac 100644
+index a711482..a69305d 100644
 --- a/dlls/ntdll/unix/thread.c
 +++ b/dlls/ntdll/unix/thread.c
-@@ -2562,7 +2562,20 @@ ULONG WINAPI NtGetCurrentProcessorNumber(void)
+@@ -2565,7 +2565,20 @@ ULONG WINAPI NtGetCurrentProcessorNumber(void)
  
- #if defined(__linux__) && defined(__NR_getcpu)
-     int res = syscall(__NR_getcpu, &processor, NULL, NULL);
--    if (res != -1) return processor;
-+    if (res != -1)
+ #if defined(HAVE_SCHED_GETCPU)
+     int res = sched_getcpu();
+-    if (res >= 0) return res;
++    if (res >= 0)
 +    {
 +        struct cpu_topology_override *override = get_cpu_topology_override();
 +        unsigned int i;
@@ -359,9 +359,9 @@ index 3909470..80488ac 100644
 +
 +        WARN("Thread is running on processor which is not in the defined override.\n");
 +    }
- #endif
- 
-     if (peb->NumberOfProcessors > 1)
+ #elif defined(__APPLE__) && (defined(__x86_64__) || defined(__i386__))
+     struct {
+         unsigned long p1, p2;
 diff --git a/dlls/ntdll/unix/unix_private.h b/dlls/ntdll/unix/unix_private.h
 index 0d90bea..aef7db1 100644
 --- a/dlls/ntdll/unix/unix_private.h
@@ -524,10 +524,10 @@ index f9b2eaa..c742f42 100644
  #endif
      if (!mask) mask = ~(affinity_t)0;
 diff --git a/server/trace.c b/server/trace.c
-index 541c0dc..1ef516a 100644
+index 77a91435b..090361645 100644
 --- a/server/trace.c
 +++ b/server/trace.c
-@@ -1529,6 +1529,24 @@ static void dump_varargs_monitor_infos( const char *prefix, data_size_t size )
+@@ -1558,6 +1558,24 @@ static void dump_varargs_monitor_infos( const char *prefix, data_size_t size )
      remove_data( size );
  }
  
@@ -549,7 +549,9 @@ index 541c0dc..1ef516a 100644
 +    remove_data( size );
 +}
 +
- typedef void (*dump_func)( const void *req );
+ void trace_request(void)
+ {
+     enum request req = current->req.request_header.req;
  
  /* Everything below this line is generated automatically by tools/make_requests */
 @@ -1607,7 +1625,8 @@ static void dump_init_process_done_request( const struct init_process_done_reque
