@@ -11,10 +11,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Staging
+      - name: Proton
         run: |
           echo "hola" > test
       - uses: softprops/action-gh-release@v2
         with:
+          tag_name: Proton
           files: |
             ./test
