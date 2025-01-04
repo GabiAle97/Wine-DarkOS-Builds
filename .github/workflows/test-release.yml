@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Proton
+      - name: Staging
         run: |
           echo "hola" > test
       - uses: softprops/action-gh-release@v2
