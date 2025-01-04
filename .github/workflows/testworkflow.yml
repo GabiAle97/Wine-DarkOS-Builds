@@ -1,4 +1,4 @@
-name: Wine-Git WoW64 CI
+name: Test Workflow
 
 on:
   schedule:
