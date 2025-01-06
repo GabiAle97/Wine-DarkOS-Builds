@@ -142,7 +142,7 @@ if [ "${EXPERIMENTAL_WOW64}" = "true" ]; then
    build_with_bwrap () {
 		BOOTSTRAP_PATH="${BOOTSTRAP_X64}"
 
-    sudo bwrap --ro-bind "${BOOTSTRAP_PATH}" / --dev /dev --ro-bind /sys /sys \
+    bwrap --ro-bind "${BOOTSTRAP_PATH}" / --dev /dev --ro-bind /sys /sys \
 		  --proc /proc --tmpfs /tmp --tmpfs /home --tmpfs /run --tmpfs /var \
 		  --tmpfs /mnt --tmpfs /media --bind "${BUILD_DIR}" "${BUILD_DIR}" \
 		  --bind-try "${XDG_CACHE_HOME}"/ccache "${XDG_CACHE_HOME}"/ccache \
@@ -205,7 +205,7 @@ build_with_bwrap () {
 		shift
 	fi
 
-    sudo bwrap --ro-bind "${BOOTSTRAP_PATH}" / --dev /dev --ro-bind /sys /sys \
+    bwrap --ro-bind "${BOOTSTRAP_PATH}" / --dev /dev --ro-bind /sys /sys \
 		  --proc /proc --tmpfs /tmp --tmpfs /home --tmpfs /run --tmpfs /var \
 		  --tmpfs /mnt --tmpfs /media --bind "${BUILD_DIR}" "${BUILD_DIR}" \
 		  --bind-try "${XDG_CACHE_HOME}"/ccache "${XDG_CACHE_HOME}"/ccache \
@@ -623,9 +623,9 @@ export CROSSCXXFLAGS="${CROSSCFLAGS_X64}"
 
 mkdir "${BUILD_DIR}"/build64
 cd "${BUILD_DIR}"/build64 || exit
-sudo ${BWRAP64} "${BUILD_DIR}"/wine/configure --enable-win64 ${WINE_BUILD_OPTIONS} --prefix "${BUILD_DIR}"/wine-"${BUILD_NAME}"-amd64
-sudo ${BWRAP64} make -j8
-sudo ${BWRAP64} make install
+${BWRAP64} "${BUILD_DIR}"/wine/configure --enable-win64 ${WINE_BUILD_OPTIONS} --prefix "${BUILD_DIR}"/wine-"${BUILD_NAME}"-amd64
+${BWRAP64} make -j8
+${BWRAP64} make install
 
 export CROSSCC="${CROSSCC_X32}"
 export CROSSCXX="${CROSSCXX_X32}"
