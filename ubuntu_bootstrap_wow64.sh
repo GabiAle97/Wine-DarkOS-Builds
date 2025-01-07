@@ -20,7 +20,7 @@ fi
 
 # Keep in mind that although you can choose any version of Ubuntu/Debian
 # here, but this script has only been tested with Ubuntu 18.04 Bionic
-export CHROOT_DISTRO="noble"
+export CHROOT_DISTRO="jammy"
 
 export CHROOT_MIRROR="https://ftp.uni-stuttgart.de/ubuntu/"
 
