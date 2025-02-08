@@ -1,5 +1,11 @@
 name: Wine-GE WoW64 CI
 
+permissions:
+  contents: write
+
+env:
+  GH_TOKEN: ${{ github.token }}
+
 on:
   schedule:
     - cron:  '0 0 */3 * *'
@@ -24,12 +30,16 @@ jobs:
           sudo apt update
           sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf
           sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz"
-          chmod +x build_wine.sh
-          export CUSTOM_SRC_PATH=https://github.com/gloriouseggroll/proton-ge-custom
-          ./build_wine.sh
-          sha256sum *.tar.xz
+          git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom wine
+          cd wine
+          ./patches/protonprep-valve-staging.sh &> patchlog.txt
+          grep -i fail patchlog.txt
+          grep -i error patchlog.txt 
+          mkdir build && cd build
+          ../configure.sh --enable-ccache --build-name=wine-action-proton --container-engine=podman
+          make redist &> log
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: Proton
           files: |
-            ./wine-action-*.tar.xz
+            ./wine-action-proton.tar.gz
