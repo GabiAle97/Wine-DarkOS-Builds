@@ -51,4 +51,4 @@ jobs:
         with:
           tag_name: Proton
           files: |
-            ./wine-action-proton.tar.gz
+            ./wine/build/wine-action-proton.tar.gz
