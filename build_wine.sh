@@ -75,7 +75,7 @@ export EXPERIMENTAL_WOW64="true"
 #
 # If you don't want to compile a custom Wine source code, then just leave this
 # variable empty.
-export CUSTOM_SRC_PATH=""
+export CUSTOM_SRC_PATH="${CUSTOM_SRC_PATH:-}"
 
 # Set to true to download and prepare the source code, but do not compile it.
 # If this variable is set to true, root rights are not required.
@@ -278,6 +278,7 @@ echo "Preparing Wine for compilation"
 echo
 
 if [ -n "${CUSTOM_SRC_PATH}" ]; then
+    echo "HAY CUSTOM_SRC_PATH"
 	is_url="$(echo "${CUSTOM_SRC_PATH}" | head -c 6)"
 
 	if [ "${is_url}" = "git://" ] || [ "${is_url}" = "https:" ]; then
