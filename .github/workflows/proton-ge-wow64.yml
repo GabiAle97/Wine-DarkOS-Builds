@@ -37,7 +37,7 @@ jobs:
           grep -i error patchlog.txt 
           mkdir build && cd build
           ../configure.sh --enable-ccache --build-name=wine-action-proton --container-engine=podman
-          make redist &> log
+          make redist
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: Proton
