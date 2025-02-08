@@ -38,14 +38,17 @@ jobs:
           sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz"
           git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom wine
           cd wine
+          ./patches/protonprep-valve-staging.sh
           patch -d wine -Np1 < ../termux-wine-fix.patch
           patch -d wine -Np1 < ../pathfix.patch
           patch -d wine -Np1 < ../ndis_proton.patch
           patch -d wine -Np1 < ../wine-virtual-memory-proton.patch
           patch -d wine -Np1 < ../esync-GE.patch
-          ./patches/protonprep-valve-staging.sh
           sed -i 's/\/files/\/wine/' ./Makefile.in
           sed -i 's/tar.gz/tar.xz/' ./Makefile.in
+          sed -i 's/\/tmp\/.wine/\/data\/data\/com.termux\/files\/usr\/tmp\/.wine/' ./wine/server/wineserver.man.in
+          sed -i 's/\/tmp\/.wine/\/data\/data\/com.termux\/files\/usr\/tmp\/.wine/' ./wine/server/wineserver.de.UTF-8.man.in
+          sed -i 's/\/tmp\/.wine/\/data\/data\/com.termux\/files\/usr\/tmp\/.wine/' ./wine/server/wineserver.fr.UTF-8.man.in
           mkdir build && cd build
           ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman
           make redist
