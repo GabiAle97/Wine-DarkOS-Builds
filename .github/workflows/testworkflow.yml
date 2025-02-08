@@ -57,7 +57,7 @@ jobs:
           ccache -s
           sha256sum *.tar.xz
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: Wine-Git
           path: ./*.tar.xz
