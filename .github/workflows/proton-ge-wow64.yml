@@ -37,11 +37,9 @@ jobs:
           patch -d wine -Np1 < ../ndis_proton.patch
           patch -d wine -Np1 < ../wine-virtual-memory-proton.patch
           patch -d wine -Np1 < ../esync-GE.patch
-          ./patches/protonprep-valve-staging.sh &> patchlog.txt
-          grep -i fail patchlog.txt
-          grep -i error patchlog.txt
+          ./patches/protonprep-valve-staging.sh
           mkdir build && cd build
-          ../configure.sh --enable-ccache --build-name=wine-action-proton --container-engine=docker
+          ../configure.sh --build-name=wine-action-proton --container-engine=podman
           make redist
       - uses: softprops/action-gh-release@v2
         with:
