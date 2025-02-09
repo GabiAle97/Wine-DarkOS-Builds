@@ -23,19 +23,8 @@ jobs:
           # this might remove tools that are actually needed,
           # when set to "true" but frees about 6 GB
           tool-cache: true
-      - name: Download artifact
-        id: download-artifact
-        uses: dawidd6/action-download-artifact@v2
-        continue-on-error: true
-        with:
-          workflow: bootstrap_wow64.yml
-          workflow_conclusion: success
-          path: /opt
       - name: Build Wine
         run: |
-          sudo apt update
-          sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf
-          sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz"
           git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom wine
           cd wine
           cp ../proton-GE-drivepatch.patch ./wine-staging/patches/ntdll-ext4-case-folder/0002-ntdll-server-Mark-drive_c-as-case-insensitive-when-c.patch
