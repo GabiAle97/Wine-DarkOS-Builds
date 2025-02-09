@@ -47,6 +47,8 @@ jobs:
           patch -d wine -Np1 < ../esync-GE.patch
           sed -i 's/\/files/\/wine/' ./Makefile.in
           sed -i 's/tar.gz/tar.xz/' ./Makefile.in
+          sudo mkdir -p /data/data/com.termux/files/usr/tmp/
+          sudo ln -s /tmp/.wine /data/data/com.termux/files/usr/tmp/.wine
           mkdir build && cd build
           ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman
           make redist
