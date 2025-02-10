@@ -1,4 +1,4 @@
-name: Wine-GE WoW64 CI
+name: Proton-GE WoW64 CI
 
 permissions:
   contents: write
