@@ -27,10 +27,11 @@ jobs:
           path: ./
       - name: Build Wine
         run: |
-          cd "PROTON-GE SRC WoW64/build"
+          mv "PROTON-GE SRC WoW64" wine
+          cd wine/build
           make redist
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: Proton
           files: |
-            "./PROTON-GE SRC WoW64/build/wine-action-proton-GE.tar.xz"
+            ./wine/build/wine-action-proton-GE.tar.xz
