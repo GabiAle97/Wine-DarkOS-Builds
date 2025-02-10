@@ -28,6 +28,8 @@ jobs:
       - name: Build Wine
         run: |
           mv "PROTON-GE SRC WoW64" wine
+          sudo chmod -R +x wine
+          sudo chown -R $(whoami):$(whoami) wine
           cd wine/build
           make redist
       - uses: softprops/action-gh-release@v2
