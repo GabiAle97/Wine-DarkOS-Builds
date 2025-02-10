@@ -23,24 +23,18 @@ jobs:
           # this might remove tools that are actually needed,
           # when set to "true" but frees about 6 GB
           tool-cache: true
+      - name: Download artifact
+        id: download-artifact
+        uses: dawidd6/action-download-artifact@v2
+        continue-on-error: true
+        with:
+          workflow: proton-ge-init.yml
+          workflow_conclusion: success
+          path: /opt
       - name: Build Wine
         run: |
-          git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom wine
-          cd wine
-          cp ../proton-GE-drivepatch.patch ./wine-staging/patches/ntdll-ext4-case-folder/0002-ntdll-server-Mark-drive_c-as-case-insensitive-when-c.patch
-          ./patches/protonprep-valve-staging.sh
-          patch -d wine -Np1 < ../termux-wine-fix-protonge.patch
-          patch -d wine -Np1 < ../pathfix.patch
-          patch -d wine -Np1 < ../ndis_proton.patch
-          patch -d wine -Np1 < ../wine-virtual-memory-proton.patch
-          patch -d wine -Np1 < ../esync-GE.patch
-          sed -i 's/\/files/\/wine/' ./Makefile.in
-          sed -i 's/tar.gz/tar.xz/' ./Makefile.in
-          sudo mkdir -p /data/data/com.termux/files/usr/tmp/
-          sudo chown -R $(whoami):$(whoami) /data/data
-          mkdir build && cd build
-          ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman
-          sudo make redist
+          sudo tar -xpf "/opt/proton-src.tar.xz"
+          make redist
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: Proton

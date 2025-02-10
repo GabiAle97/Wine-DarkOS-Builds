@@ -1,0 +1,46 @@
+name: Proton GE init
+
+permissions:
+  contents: write
+
+env:
+  GH_TOKEN: ${{ github.token }}
+
+on:
+  schedule:
+    - cron:  '0 0 */3 * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # this might remove tools that are actually needed,
+          # when set to "true" but frees about 6 GB
+          tool-cache: true
+      - name: Build Wine
+        run: |
+          git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom wine
+          cd wine
+          cp ../proton-GE-drivepatch.patch ./wine-staging/patches/ntdll-ext4-case-folder/0002-ntdll-server-Mark-drive_c-as-case-insensitive-when-c.patch
+          ./patches/protonprep-valve-staging.sh
+          patch -d wine -Np1 < ../wine-darkos/termux-wine-fix-protonge.patch
+          patch -d wine -Np1 < ../wine-darkos/pathfix.patch
+          patch -d wine -Np1 < ../wine-darkos/ndis_proton.patch
+          patch -d wine -Np1 < ../wine-darkos/wine-virtual-memory-proton.patch
+          patch -d wine -Np1 < ../wine-darkos/esync-GE.patch
+          sed -i 's/\/files/\/wine/' ./Makefile.in
+          sed -i 's/tar.gz/tar.xz/' ./Makefile.in
+          mkdir build && cd build
+          ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman
+          cd ../..
+          sudo tar -I "xz -T0 -9" -cpf proton-src.tar.xz wine
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PROTON-GE SRC WoW64
+          path: /wine/proton-src.tar.xz
