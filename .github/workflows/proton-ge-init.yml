@@ -43,4 +43,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: PROTON-GE SRC WoW64
-          path: /wine/proton-src.tar.xz
+          path: ./proton-src.tar.xz
