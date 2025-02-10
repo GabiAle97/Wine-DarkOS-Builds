@@ -27,7 +27,7 @@ jobs:
           path: /opt
       - name: Build Wine
         run: |
-          mv /opt/PROTON-GE SRC WoW64/proton-src.tar.xz .
+          mv "/opt/PROTON-GE SRC WoW64/proton-src.tar.xz" .
           sudo tar -xf "proton-src.tar.xz"
           make redist
       - uses: softprops/action-gh-release@v2
