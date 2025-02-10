@@ -24,11 +24,10 @@ jobs:
         with:
           workflow: proton-ge-init.yml
           workflow_conclusion: success
-          path: /opt
+          path: ./
       - name: Build Wine
         run: |
-          mv "/opt/PROTON-GE SRC WoW64/proton-src.tar.xz" .
-          sudo tar -xf "proton-src.tar.xz"
+          cd wine/build
           make redist
       - uses: softprops/action-gh-release@v2
         with:

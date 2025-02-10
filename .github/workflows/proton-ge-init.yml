@@ -38,9 +38,7 @@ jobs:
           sed -i 's/tar.gz/tar.xz/' ./Makefile.in
           mkdir build && cd build
           ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman
-          cd ../..
-          sudo tar -I "xz -T0 -9" -cpf proton-src.tar.xz wine
       - uses: actions/upload-artifact@v4
         with:
           name: PROTON-GE SRC WoW64
-          path: ./proton-src.tar.xz
+          path: ./wine
