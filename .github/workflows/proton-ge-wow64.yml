@@ -33,7 +33,7 @@ jobs:
           sudo chmod -R +x wine
           sudo chown -R $(whoami):$(whoami) wine
           cd wine/build
-          make -d -j redist
+          make -d redist
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: Proton
