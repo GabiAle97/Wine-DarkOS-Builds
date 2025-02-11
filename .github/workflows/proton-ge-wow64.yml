@@ -32,8 +32,10 @@ jobs:
           mv "PROTON-GE SRC WoW64" wine
           sudo chmod -R +x wine
           sudo chown -R $(whoami):$(whoami) wine
-          cd wine/build
-          make -d redist
+          cd wine
+          ./patches/protonprep-valve-staging.sh
+          cd build
+          make redist
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: Proton
