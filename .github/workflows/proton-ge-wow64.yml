@@ -27,6 +27,7 @@ jobs:
           path: ./
       - name: Build Wine
         run: |
+          ls -la
           sudo mkdir -p /data/data/com.termux/files/usr/ && sudo chown -R $(whoami):$(whoami) /data/data
           ln -s /tmp /data/data/com.termux/files/usr
           mv "PROTON-GE SRC WoW64" wine
