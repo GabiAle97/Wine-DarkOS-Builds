@@ -32,10 +32,13 @@ jobs:
           mv "PROTON-GE SRC WoW64" wine
           sudo chmod -R +x wine
           sudo chown -R $(whoami):$(whoami) wine
-          ls -la wine
-          cd wine/
+          pwd
           ls -la
           cd wine
+          pwd
+          ls -la
+          cd wine
+          pwd
           ls -la
           cd build
           make -d redist
