@@ -33,7 +33,11 @@ jobs:
           sudo chmod -R +x wine
           sudo chown -R $(whoami):$(whoami) wine
           ls -la wine
-          cd wine/wine/build
+          cd wine/
+          ls -la
+          cd wine
+          ls -la
+          cd build
           make -d redist
       - uses: softprops/action-gh-release@v2
         with:
