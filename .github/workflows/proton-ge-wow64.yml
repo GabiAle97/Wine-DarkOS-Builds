@@ -27,12 +27,12 @@ jobs:
           path: ./
       - name: Build Wine
         run: |
-          ls -la
           sudo mkdir -p /data/data/com.termux/files/usr/ && sudo chown -R $(whoami):$(whoami) /data/data
           ln -s /tmp /data/data/com.termux/files/usr
           mv "PROTON-GE SRC WoW64" wine
           sudo chmod -R +x wine
           sudo chown -R $(whoami):$(whoami) wine
+          ls -la wine
           cd wine/wine/build
           make -d redist
       - uses: softprops/action-gh-release@v2
