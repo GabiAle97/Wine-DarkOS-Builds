@@ -32,18 +32,10 @@ jobs:
           mv "PROTON-GE SRC WoW64" wine
           sudo chmod -R +x wine
           sudo chown -R $(whoami):$(whoami) wine
-          pwd
-          ls -la
-          cd wine
-          pwd
-          ls -la
-          cd wine
-          pwd
-          ls -la
-          cd build
+          cd wine/build
           make -d redist
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: Proton
           files: |
-            ./wine/wine/build/wine-action-proton-GE.tar.xz
+            ./wine/build/wine-action-proton-GE.tar.xz
