@@ -35,7 +35,6 @@ jobs:
           patch -d wine -Np1 < ../wine-virtual-memory-proton.patch
           patch -d wine -Np1 < ../esync-GE.patch
           sed -i 's/tar.gz/tar.xz/' ./Makefile.in
-          sed -i "$(sed -n '/mv $(REDIST_DIR) $(BUILD_NAME)/=' ./Makefile.in) i\     mv \$\(BUILD_NAME\)\/files \$\(BUILD_NAME\)\/wine" ./Makefile.in 
           mkdir build && cd build
           ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman
       - uses: actions/upload-artifact@v4
