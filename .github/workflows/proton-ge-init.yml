@@ -28,7 +28,6 @@ jobs:
           git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom wine
           cd wine
           ./patches/protonprep-valve-staging.sh
-          sed -i '/dlls\/winevulkan\/make_vulkan -x vk.xml/d' ./Makefile.in
           mkdir build && cd build
           ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman
       - uses: actions/upload-artifact@v4
