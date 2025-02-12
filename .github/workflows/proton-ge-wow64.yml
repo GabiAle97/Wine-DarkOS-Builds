@@ -34,8 +34,11 @@ jobs:
           sudo chmod -R +x wine
           sudo chown -R $(whoami):$(whoami) wine
           cd wine/build
-          make -j redist
-      
+          make enable_ccache=0 redist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PROTON-GE SRC WoW64
+          path: ./wine
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: Proton
