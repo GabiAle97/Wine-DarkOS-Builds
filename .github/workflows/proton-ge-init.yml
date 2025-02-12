@@ -27,9 +27,13 @@ jobs:
         run: |
           git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom wine
           cd wine
+          cp ../proton-GE-drivepatch.patch ./wine-staging/patches/ntdll-ext4-case-folder/0002-ntdll-server-Mark-drive_c-as-case-insensitive-when-c.patch
           ./patches/protonprep-valve-staging.sh
-          sed -i 's/\/files/\/wine/' ./Makefile.in
-          sed -i 's/tar.gz/tar.xz/' ./Makefile.in
+          patch -d wine -Np1 < ../termux-wine-fix-protonge.patch
+          patch -d wine -Np1 < ../pathfix.patch
+          patch -d wine -Np1 < ../ndis_proton.patch
+          patch -d wine -Np1 < ../wine-virtual-memory-proton.patch
+          patch -d wine -Np1 < ../esync-GE.patch
           mkdir build && cd build
           ../configure.sh --build-name=wine-action-proton-GE --container-engine=docker
       - uses: actions/upload-artifact@v4
