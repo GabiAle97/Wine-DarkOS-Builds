@@ -26,6 +26,7 @@ jobs:
           workflow_conclusion: success
           path: ./
       - name: Build Wine
+        continue-on-error: true
         run: |
           sudo mkdir -p /data/data/com.termux/files/usr/ && sudo chown -R $(whoami):$(whoami) /data/data
           ln -s /tmp /data/data/com.termux/files/usr
@@ -34,6 +35,7 @@ jobs:
           sudo chown -R $(whoami):$(whoami) wine
           cd wine/build
           make -j redist
+      
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: Proton
