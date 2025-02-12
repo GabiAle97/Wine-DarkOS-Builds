@@ -32,7 +32,7 @@ jobs:
           sed -i 's/\/files/\/wine/' ./Makefile.in
           sed -i 's/tar.gz/tar.xz/' ./Makefile.in
           mkdir build && cd build
-          ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman
+          ../configure.sh --build-name=wine-action-proton-GE --container-engine=docker
       - uses: actions/upload-artifact@v4
         with:
           name: PROTON-GE SRC WoW64
