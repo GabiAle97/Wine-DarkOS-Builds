@@ -27,7 +27,6 @@ jobs:
         run: |
           git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom wine
           cd wine
-          cp ../proton-GE-drivepatch.patch ./wine-staging/patches/ntdll-ext4-case-folder/0002-ntdll-server-Mark-drive_c-as-case-insensitive-when-c.patch
           ./patches/protonprep-valve-staging.sh
           sed -i 's/\/files/\/wine/' ./Makefile.in
           sed -i 's/tar.gz/tar.xz/' ./Makefile.in
