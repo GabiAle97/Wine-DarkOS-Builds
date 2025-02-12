@@ -25,8 +25,19 @@ jobs:
           workflow: proton-ge-init.yml
           workflow_conclusion: success
           path: ./
+      - name: Download artifact
+        id: download-artifact
+        uses: dawidd6/action-download-artifact@v2
+        continue-on-error: true
+        with:
+          workflow: bootstrap_wow64.yml
+          workflow_conclusion: success
+          path: /opt
       - name: Build Wine
         run: |
+          sudo apt update
+          sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf
+          sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz"
           sudo mkdir -p /data/data/com.termux/files/usr/ && sudo chown -R $(whoami):$(whoami) /data/data
           ln -s /tmp /data/data/com.termux/files/usr
           mv "PROTON-GE SRC WoW64" wine
