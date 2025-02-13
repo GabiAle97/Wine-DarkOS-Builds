@@ -41,8 +41,6 @@ jobs:
           cd wine
           cp ../proton-GE-drivepatch.patch ./wine-staging/patches/ntdll-ext4-case-folder/0002-ntdll-server-Mark-drive_c-as-case-insensitive-when-c.patch
           ./patches/protonprep-valve-staging.sh
-          patch -d wine -Np1 < ../termux-wine-fix-protonge.patch
-          patch -d wine -Np1 < ../pathfix.patch
           sed -i 's/tar.gz/tar.xz/' ./Makefile.in
           mkdir build && cd build
           ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman
