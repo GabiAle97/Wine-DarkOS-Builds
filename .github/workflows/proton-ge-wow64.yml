@@ -42,9 +42,6 @@ jobs:
           ./patches/protonprep-valve-staging.sh
           patch -d wine -Np1 < ../termux-wine-fix-protonge.patch
           patch -d wine -Np1 < ../pathfix.patch
-          patch -d wine -Np1 < ../ndis_proton.patch
-          patch -d wine -Np1 < ../wine-virtual-memory-proton.patch
-          patch -d wine -Np1 < ../esync-GE.patch
           sed -i 's/tar.gz/tar.xz/' ./Makefile.in
           mkdir build && cd build
           ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman
