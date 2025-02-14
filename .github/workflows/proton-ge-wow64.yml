@@ -48,7 +48,7 @@ jobs:
           cp ../wine-virtual-memory-proton.patch patches/termux-patches
           cp ../esync-GE.patch patches/termux-patches
           sudo chmod +x -R ./patches/termux-patches
-          ls -R ./patches/termux-patches
+          ls -laR ./patches/
           sleep 30
           ./patches/protonprep-valve-staging.sh
           sed -i 's/tar.gz/tar.xz/' ./Makefile.in
