@@ -47,6 +47,7 @@ jobs:
           cp ../ndis_proton.patch patches/termux-patches
           cp ../wine-virtual-memory-proton.patch patches/termux-patches
           cp ../esync-GE.patch patches/termux-patches
+          sudo chmod +x -R ./patches/termux-patches
           ls -R ./patches/termux-patches
           sleep 30
           ./patches/protonprep-valve-staging.sh
