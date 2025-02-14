@@ -47,6 +47,8 @@ jobs:
           cp ../ndis_proton.patch patches/termux-patches
           cp ../wine-virtual-memory-proton.patch patches/termux-patches
           cp ../esync-GE.patch patches/termux-patches
+          ls -R ./patches/termux-patches
+          sleep 30
           ./patches/protonprep-valve-staging.sh
           sed -i 's/tar.gz/tar.xz/' ./Makefile.in
           sed -i -E "$(sed -n '/mv $(REDIST_DIR) $(BUILD_NAME)/=' ./Makefile.in) i\\\tmv \$\(BUILD_NAME\)\/files \$\(BUILD_NAME\)\/wine" ./Makefile.in
