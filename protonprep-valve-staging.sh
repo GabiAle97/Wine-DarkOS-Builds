@@ -339,12 +339,14 @@
     echo "WINE: -CUSTOM- Add PROTON_PREFER_SDL option to make it not prefer hidraw and instead expose both sdl and hidraw"
     patch -Np1 < ../patches/proton/PREFER_SDL.patch
 
-    popd
-
 ### END PROTON-GE ADDITIONAL CUSTOM PATCHES ###
 
 ### (2-7) PROTON-GE TERMUX CUSTOM PATCHES ###
 
+    echo "ACTUALMENTE ESTOY EN: "
+    pwd 
+    ls -lRa
+    sleep 30
     patch -Np1 < ../patches/termux-patches/termux-wine-fix-protonge.patch
     echo "TERMUX: -CUSTOM- termux-wine-fix-protonge.patch"
     patch -Np1 < ../patches/termux-patches/pathfix.patch
@@ -355,7 +357,7 @@
     echo "TERMUX: -CUSTOM- wine-virtual-memory-proton.patch"
     patch -Np1 < ../patches/termux-patches/esync-GE.patch
     echo "TERMUX: -CUSTOM- esync-GE.patch"
-
+    popd
 ### END PROTON-GE TERMUX CUSTOM PATCHES ###
 
 ### END WINE PATCHING ###
