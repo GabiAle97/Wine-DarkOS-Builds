@@ -34,10 +34,10 @@ jobs:
           tool-cache: true
       - name: Build Wine
         run: |
-          sudo apt update
-          sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf
-          sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz"
-          git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom wine
+          sudo apt update &>/dev/null
+          sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf &>/dev/null
+          sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz" &>/dev/null
+          git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom wine &>/dev/null
           cd wine
           cp ../proton-GE-drivepatch.patch ./wine-staging/patches/ntdll-ext4-case-folder/0002-ntdll-server-Mark-drive_c-as-case-insensitive-when-c.patch
           cp ../protonprep-valve-staging.sh ./patches/protonprep-valve-staging.sh
@@ -54,9 +54,9 @@ jobs:
           sed -i 's/tar.gz/tar.xz/' ./Makefile.in
           sed -i -E "$(sed -n '/mv $(REDIST_DIR) $(BUILD_NAME)/=' ./Makefile.in) i\\\tmv \$\(BUILD_NAME\)\/files \$\(BUILD_NAME\)\/wine" ./Makefile.in
           mkdir build && cd build
-          ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman
+          ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman &>/dev/null
           sudo mkdir -p /data/data/com.termux/files/usr/tmp && sudo chown -R $(whoami):$(whoami) /data/data
-          ln -s /tmp/.wine /data/data/com.termux/files/usr/tmp
+          ls -laR /data/data/
           sudo chmod -R +x ..
           sudo chown -R $(whoami):$(whoami) ..
           make redist
