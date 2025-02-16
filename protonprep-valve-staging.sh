@@ -343,10 +343,6 @@
 
 ### (2-7) PROTON-GE TERMUX CUSTOM PATCHES ###
 
-    echo "ACTUALMENTE ESTOY EN: "
-    pwd 
-    ls -lRa
-    sleep 30
     patch -Np1 < ../patches/termux-patches/termux-wine-fix-protonge.patch
     echo "TERMUX: -CUSTOM- termux-wine-fix-protonge.patch"
     patch -Np1 < ../patches/termux-patches/pathfix.patch
