@@ -55,8 +55,7 @@ jobs:
           sed -i -E "$(sed -n '/mv $(REDIST_DIR) $(BUILD_NAME)/=' ./Makefile.in) i\\\tmv \$\(BUILD_NAME\)\/files \$\(BUILD_NAME\)\/wine" ./Makefile.in
           mkdir build && cd build
           ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman &>/dev/null
-          sudo mkdir -p /data/data/com.termux/files/usr/tmp && sudo chown -R $(whoami):$(whoami) /data/data
-          ls -laR /data/data/
+          sudo mkdir -p /data/data/com.termux/files/usr/tmp/.wine && sudo chown -R $(whoami):$(whoami) /data/data
           sudo chmod -R +x ..
           sudo chown -R $(whoami):$(whoami) ..
           make redist
