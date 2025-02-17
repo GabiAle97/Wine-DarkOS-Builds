@@ -31,7 +31,7 @@ jobs:
           sudo apt update &>/dev/null
           sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf automake libtool &>/dev/null
           sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz" &>/dev/null
-          git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom wine &>/dev/null
+          git clone http://github.com/gloriouseggroll/proton-ge-custom wine &>/dev/null
           cd wine
           cp ../proton-GE-drivepatch.patch ./wine-staging/patches/ntdll-ext4-case-folder/0002-ntdll-server-Mark-drive_c-as-case-insensitive-when-c.patch
           cp ../protonprep-valve-staging.sh ./patches/protonprep-valve-staging.sh
@@ -48,49 +48,7 @@ jobs:
           mkdir build && cd build
           ../configure.sh \
           --build-name=wine-action-proton-GE \
-          --container-engine=podman \
-          --without-alsa \
-          --without-capi \
-          --without-coreaudio \
-          --without-cups \
-          --without-dbus \
-          --with-fontconfig \
-          --with-freetype \
-          --without-gettext \
-          --with-gettextpo=no \
-          --without-gphoto \
-          --with-gnutls \
-          --without-gstreamer \
-          --without-inotify \
-          --with-krb5 \
-          --with-mingw=clang \
-          --without-netapi \
-          --without-opencl \
-          --with-opengl \
-          --with-osmesa \
-          --without-oss \
-          --without-pcap \
-          --with-pthread \
-          --with-pulse \
-          --without-sane \
-          --with-sdl \
-          --without-udev \
-          --without-unwind \
-          --without-usb \
-          --without-v4l2 \
-          --with-vulkan \
-          --with-xcomposite \
-          --with-xcursor \
-          --with-xfixes \
-          --without-xinerama \
-          --with-xinput \
-          --with-xinput2 \
-          --with-xrandr \
-          --with-xrender \
-          --without-xshape \
-          --with-xshm \
-          --without-xxf86vm \
-          --enable-archs=i386,aarch64,arm64ec
+          --container-engine=podman
           sudo mkdir -p /data/data/com.termux/files/usr/tmp/.wine && sudo chown -R $(whoami):$(whoami) /data/data
           sudo chmod -R +x ..
           sudo chown -R $(whoami):$(whoami) ..
