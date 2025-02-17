@@ -49,8 +49,6 @@ jobs:
           ../configure.sh \
           --build-name=wine-action-proton-GE \
           --container-engine=podman \
-          --enable-nls \
-          --disable-tests \
           --without-alsa \
           --without-capi \
           --without-coreaudio \
@@ -92,7 +90,7 @@ jobs:
           --without-xshape \
           --with-xshm \
           --without-xxf86vm \
-          --enable-archs=i386,aarch64
+          --enable-archs=i386,aarch64,arm64ec
           sudo mkdir -p /data/data/com.termux/files/usr/tmp/.wine && sudo chown -R $(whoami):$(whoami) /data/data
           sudo chmod -R +x ..
           sudo chown -R $(whoami):$(whoami) ..
