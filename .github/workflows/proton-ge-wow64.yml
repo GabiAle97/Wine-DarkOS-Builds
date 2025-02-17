@@ -49,7 +49,6 @@ jobs:
           ../configure.sh \
           --build-name=wine-action-proton-GE \
           --container-engine=podman \
-          --enable_wineandroid_drv=no \
           --enable-nls \
           --disable-tests \
           --without-alsa \
