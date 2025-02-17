@@ -32,6 +32,8 @@ jobs:
           sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf automake libtool &>/dev/null
           sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz" &>/dev/null
           git clone http://github.com/gloriouseggroll/proton-ge-custom wine &>/dev/null
+          git submodule update --init --recursive ./wine-staging
+          git submodule update --init --recursive ./wine
           cd wine
           cp ../proton-GE-drivepatch.patch ./wine-staging/patches/ntdll-ext4-case-folder/0002-ntdll-server-Mark-drive_c-as-case-insensitive-when-c.patch
           cp ../protonprep-valve-staging.sh ./patches/protonprep-valve-staging.sh
