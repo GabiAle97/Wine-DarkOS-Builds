@@ -26,14 +26,18 @@ jobs:
           workflow_conclusion: success
           path: /opt
       - uses: actions/checkout@v3
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # this might remove tools that are actually needed,
+          # when set to "true" but frees about 6 GB
+          tool-cache: true
       - name: Build Wine
         run: |
           sudo apt update &>/dev/null
           sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf automake libtool &>/dev/null
           sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz" &>/dev/null
-          git clone http://github.com/gloriouseggroll/proton-ge-custom wine &>/dev/null
-          git submodule update --init --recursive ./wine-staging
-          git submodule update --init --recursive ./wine
+          git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom wine &>/dev/null
           cd wine
           cp ../proton-GE-drivepatch.patch ./wine-staging/patches/ntdll-ext4-case-folder/0002-ntdll-server-Mark-drive_c-as-case-insensitive-when-c.patch
           cp ../protonprep-valve-staging.sh ./patches/protonprep-valve-staging.sh
@@ -46,11 +50,10 @@ jobs:
           sudo chmod +x -R ./patches/termux-patches
           ./patches/protonprep-valve-staging.sh
           sed -i 's/tar.gz/tar.xz/' ./Makefile.in
+          sed -i 's/W_TMP_EARLY=.*/\W_TMP_EARLY="\/data\/data\/com.termux\/files\/usr\/tmp\"/' protonfixes/winetricks
           sed -i -E "$(sed -n '/mv $(REDIST_DIR) $(BUILD_NAME)/=' ./Makefile.in) i\\\tmv \$\(BUILD_NAME\)\/files \$\(BUILD_NAME\)\/wine" ./Makefile.in
           mkdir build && cd build
-          ../configure.sh \
-          --build-name=wine-action-proton-GE \
-          --container-engine=podman
+          ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman &>/dev/null
           sudo mkdir -p /data/data/com.termux/files/usr/tmp/.wine && sudo chown -R $(whoami):$(whoami) /data/data
           sudo chmod -R +x ..
           sudo chown -R $(whoami):$(whoami) ..
