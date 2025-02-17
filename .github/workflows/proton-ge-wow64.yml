@@ -35,7 +35,7 @@ jobs:
       - name: Build Wine
         run: |
           sudo apt update &>/dev/null
-          sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf &>/dev/null
+          sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf automake libtool &>/dev/null
           sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz" &>/dev/null
           git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom wine &>/dev/null
           cd wine
@@ -48,8 +48,6 @@ jobs:
           cp ../wine-virtual-memory-proton.patch patches/termux-patches
           cp ../esync-GE.patch patches/termux-patches
           sudo chmod +x -R ./patches/termux-patches
-          ls -laR ./patches/
-          sleep 30
           ./patches/protonprep-valve-staging.sh
           sed -i 's/tar.gz/tar.xz/' ./Makefile.in
           sed -i -E "$(sed -n '/mv $(REDIST_DIR) $(BUILD_NAME)/=' ./Makefile.in) i\\\tmv \$\(BUILD_NAME\)\/files \$\(BUILD_NAME\)\/wine" ./Makefile.in
