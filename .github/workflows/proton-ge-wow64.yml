@@ -52,7 +52,7 @@ jobs:
           sed -i 's/tar.gz/tar.xz/' ./Makefile.in
           sed -i 's/W_TMP_EARLY=.*/\W_TMP_EARLY="\/data\/data\/com.termux\/files\/usr\/tmp\"/' protonfixes/winetricks
           sed -i -E "$(sed -n '/mv $(REDIST_DIR) $(BUILD_NAME)/=' ./Makefile.in) i\\\tmv \$\(BUILD_NAME\)\/files \$\(BUILD_NAME\)\/wine" ./Makefile.in
-          sed -i -E "$(($(sed -n '/ -w/=' default_pfx.py) - 2)) i\\\tsubprocess.run(runtime_args + [\"/bin/bash\", \"-c\",\n\\t\\t\"mkdir -p /data/data/com.termux/files/usr/tmp/.wine\"],\n\\t\\tenv=local_env, check=True)\n" ./default_pfx.py
+          sed -i -E "$(($(sed -n '/ -w/=' default_pfx.py) - 2)) i\    subprocess.run(runtime_args + [\"/bin/bash\", \"-c\",\n        \"mkdir -p /data/data/com.termux/files/usr/tmp/.wine\"],\n        env=local_env, check=True)\n" ./default_pfx.py
           mkdir build && cd build
           ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman &>/dev/null
           sudo mkdir -p /data/data/com.termux/files/usr/tmp/.wine && sudo chown -R $(whoami):$(whoami) /data/data
