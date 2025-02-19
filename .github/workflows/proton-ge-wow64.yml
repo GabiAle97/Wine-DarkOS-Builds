@@ -53,7 +53,6 @@ jobs:
           sed -i 's/W_TMP_EARLY=.*/\W_TMP_EARLY="\/data\/data\/com.termux\/files\/usr\/tmp\"/' protonfixes/winetricks
           sed -i -E "$(sed -n '/mv $(REDIST_DIR) $(BUILD_NAME)/=' ./Makefile.in) i\\\tmv \$\(BUILD_NAME\)\/files \$\(BUILD_NAME\)\/wine" ./Makefile.in
           sed -i -E "$(($(sed -n '/ -w/=' default_pfx.py) - 2)) i\    subprocess.run(runtime_args + [\"/bin/bash\", \"-c\",\n        \"mkdir -p /data/data/com.termux/files/usr/tmp/.wine && chmod 700 /data/data/com.termux/files/usr/tmp/.wine\"],\n        env=local_env, check=True)\n" ./default_pfx.py
-          sed -i -E "$(sed -n '/$(DOCKER_BASE) $(MAKE) -j$(J)/=' Makefile.in) i\\\techo \"FALLODELREDISTMAKE\"\n\\techo \"$(cat Makefile.in | grep '$(DOCKER_BASE) $(MAKE) -j$(J)')\"\n\\tdf -h" ./Makefile.in
           mkdir build && cd build
           ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman &>/dev/null
           sudo mkdir -p /data/data/com.termux/files/usr/tmp/.wine && sudo chown -R $(whoami):$(whoami) /data/data && sudo chmod 700 /data/data
