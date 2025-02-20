@@ -96,7 +96,7 @@ export WINE_BUILD_OPTIONS="--disable-winemenubuilder --disable-win16 --enable-wi
 # A temporary directory where the Wine source code will be stored.
 # Do not set this variable to an existing non-empty directory!
 # This directory is removed and recreated on each script run.
-export BUILD_DIR="${HOME}"/wine/build
+export BUILD_DIR=~/work/Wine-DarkOS-Builds/Wine-DarkOS-Builds/wine/build
 
 # Implement a new WoW64 specific check which will change the way Wine is built.
 # New WoW64 builds will use a different bootstrap which require different
