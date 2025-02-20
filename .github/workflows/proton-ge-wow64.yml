@@ -52,7 +52,7 @@ jobs:
           ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman &>/dev/null
           cd ..
           cp ../build_protonGE.sh .
-          chmod +x ./build_protonGE.sh
+          chmod +x build_protonGE.sh
           ./build_protonGE.sh
       - uses: actions/upload-artifact@v4
         with:
