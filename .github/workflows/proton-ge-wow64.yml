@@ -50,7 +50,7 @@ jobs:
           sed -i -E "$(($(sed -n '/ -w/=' default_pfx.py) - 2)) i\    subprocess.run(runtime_args + [\"/bin/bash\", \"-c\",\n        \"mkdir -p /data/data/com.termux/files/usr/tmp/.wine && chmod 700 /data/data/com.termux/files/usr/tmp/.wine\"],\n        env=local_env, check=True)\n" ./default_pfx.py
           mkdir build && cd build
           ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman &>/dev/null
-          cp ../..build_protonGE.sh .
+          cp ../../build_protonGE.sh .
           ./build_protonGE.sh
       - uses: actions/upload-artifact@v4
         with:
