@@ -31,8 +31,6 @@ jobs:
           sudo apt update &>/dev/null
           sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf automake libtool &>/dev/null
           sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz" &>/dev/null
-          pwd
-          ls -la
           git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom wine &>/dev/null
           cd wine
           cp ../proton-GE-drivepatch.patch ./wine-staging/patches/ntdll-ext4-case-folder/0002-ntdll-server-Mark-drive_c-as-case-insensitive-when-c.patch
@@ -52,7 +50,7 @@ jobs:
           sed -i -E "$(($(sed -n '/ -w/=' default_pfx.py) - 2)) i\    subprocess.run(runtime_args + [\"/bin/bash\", \"-c\",\n        \"mkdir -p /data/data/com.termux/files/usr/tmp/.wine && chmod 700 /data/data/com.termux/files/usr/tmp/.wine\"],\n        env=local_env, check=True)\n" ./default_pfx.py
           mkdir build && cd build
           ../configure.sh --build-name=wine-action-proton-GE --container-engine=podman &>/dev/null
-          cp ../build_protonGE.sh .
+          cp ../..build_protonGE.sh .
           ./build_protonGE.sh
       - uses: actions/upload-artifact@v4
         with:
