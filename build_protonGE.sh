@@ -300,8 +300,8 @@ if [ -d "results/wine" ]; then
         cp results/wine/wine-tkg-config.txt results/wine
     fi
     cd results
-    tar -Jcf "wine-action-${WINE_BRANCH}".tar.xz wine
-    mv "wine-action-${WINE_BRANCH}".tar.xz "${result_dir}"
+    tar -Jcf "wine-action-protonGE".tar.xz wine
+    mv wine-action-protonGE.tar.xz "${result_dir}"
     cd -
 fi
 
