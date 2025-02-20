@@ -270,7 +270,8 @@ export CFLAGS="${CFLAGS_X64}"
 export CXXFLAGS="${CFLAGS_X64}"
 export CROSSCFLAGS="${CROSSCFLAGS_X64}"
 export CROSSCXXFLAGS="${CROSSCFLAGS_X64}"
-pwd
+rm -rf "${BUILD_DIR}"/Makefile
+${BWRAP64} "${BUILD_DIR}"/../wine/configure --enable-archs=i386,x86_64 ${WINE_BUILD_OPTIONS} --prefix "${BUILD_DIR}"/wine-protonGE-amd64
 ${BWRAP64} make -j8
 ${BWRAP64} make install
 
@@ -291,7 +292,7 @@ fi
 
 export XZ_OPT="-9"
 mkdir results
-mv wine-${BUILD_NAME}-amd64 results/wine
+mv wine-protonGE-amd64 results/wine
 
 if [ -d "results/wine" ]; then
     rm -rf results/wine/include results/wine/share/applications results/wine/share/man
