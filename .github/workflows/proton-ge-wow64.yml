@@ -25,13 +25,21 @@ jobs:
           workflow: bootstrap_wow64.yml
           workflow_conclusion: success
           path: /opt
+      - name: Download artifact proton
+        id: download-artifact-proton
+        uses: dawidd6/action-download-artifact@v2
+        continue-on-error: true
+        with:
+          workflow: proton-ge-init.yml
+          workflow_conclusion: success
+          path: ./
       - uses: actions/checkout@v3
       - name: Build Wine
         run: |
           sudo apt update &>/dev/null
           sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf automake libtool &>/dev/null
           sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz" &>/dev/null
-          git clone --recurse-submodules http://github.com/gloriouseggroll/proton-ge-custom wine &>/dev/null
+          mv "PROTON-GE SRC WoW64" wine
           cd wine
           cp ../proton-GE-drivepatch.patch ./wine-staging/patches/ntdll-ext4-case-folder/0002-ntdll-server-Mark-drive_c-as-case-insensitive-when-c.patch
           cp ../protonprep-valve-staging.sh ./patches/protonprep-valve-staging.sh
