@@ -50,6 +50,7 @@ jobs:
           cp ../wine-virtual-memory-proton.patch patches/termux-patches          
           cp ../esync-GE.patch patches/termux-patches
           sudo chmod +x -R ./patches/termux-patches
+          chmod +x ./patches/protonprep-valve-staging.sh
           ./patches/protonprep-valve-staging.sh
           sed -i 's/tar.gz/tar.xz/' ./Makefile.in
           sed -i 's/tar -cvzf $(BUILD_NAME).tar.xz $(BUILD_NAME)/tar -cvzf \$\(BUILD_NAME\).tar.xz \$\(BUILD_NAME\)\/*/' ./Makefile.in
