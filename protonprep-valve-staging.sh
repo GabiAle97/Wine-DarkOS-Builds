@@ -252,17 +252,6 @@
     patch -Np1 < ../wine-staging/patches/winedevice-Default_Drivers/0003-dxgmms1.sys-Add-stub-driver.patch
     patch -Np1 < ../wine-staging/patches/winedevice-Default_Drivers/0004-programs-winedevice-Load-some-common-drivers-and-fix.patch
 
-    echo "WINE: -STAGING- winex11-Fixed-scancodes manually applied"
-    patch -Np1 < ../patches/wine-hotfixes/staging/winex11-Fixed-scancodes/0001-winecfg-Move-input-config-options-to-a-dedicated-tab.patch
-    patch -Np1 < ../patches/wine-hotfixes/staging/winex11-Fixed-scancodes/0002-winex11-Always-create-the-HKCU-configuration-registr.patch
-    patch -Np1 < ../patches/wine-hotfixes/staging/winex11-Fixed-scancodes/0003-winex11-Write-supported-keyboard-layout-list-in-regi.patch
-    patch -Np1 < ../patches/wine-hotfixes/staging/winex11-Fixed-scancodes/0004-winecfg-Add-a-keyboard-layout-selection-config-optio.patch
-    patch -Np1 < ../patches/wine-hotfixes/staging/winex11-Fixed-scancodes/0005-winex11-Use-the-user-configured-keyboard-layout-if-a.patch
-    patch -Np1 < ../patches/wine-hotfixes/staging/winex11-Fixed-scancodes/0006-winecfg-Add-a-keyboard-scancode-detection-toggle-opt.patch
-    patch -Np1 < ../patches/wine-hotfixes/staging/winex11-Fixed-scancodes/0007-winex11-Use-scancode-high-bit-to-set-KEYEVENTF_EXTEN.patch
-    patch -Np1 < ../patches/wine-hotfixes/staging/winex11-Fixed-scancodes/0008-winex11-Support-fixed-X11-keycode-to-scancode-conver.patch
-    patch -Np1 < ../patches/wine-hotfixes/staging/winex11-Fixed-scancodes/0009-winex11-Disable-keyboard-scancode-auto-detection-by-.patch
-
     echo "WINE: -STAGING- fltmgr.sys-FltBuildDefaultSecurityDescriptor manually applied"
     patch -Np1 < ../wine-staging/patches/fltmgr.sys-FltBuildDefaultSecurityDescriptor/0001-fltmgr.sys-Implement-FltBuildDefaultSecurityDescript.patch
     patch -Np1 < ../wine-staging/patches/fltmgr.sys-FltBuildDefaultSecurityDescriptor/0002-fltmgr.sys-Create-import-library.patch
