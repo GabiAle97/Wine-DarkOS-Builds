@@ -96,7 +96,7 @@ export WINE_BUILD_OPTIONS="--disable-winemenubuilder --disable-win16 --enable-wi
 # A temporary directory where the Wine source code will be stored.
 # Do not set this variable to an existing non-empty directory!
 # This directory is removed and recreated on each script run.
-export BUILD_DIR=/home/runner/work/Wine-DarkOS-Builds/Wine-DarkOS-Builds/wine/build
+export BUILD_DIR=/home/runner/work/Wine-DarkOS-Builds/Wine-DarkOS-Builds/wine
 
 # Implement a new WoW64 specific check which will change the way Wine is built.
 # New WoW64 builds will use a different bootstrap which require different
@@ -273,14 +273,9 @@ export CFLAGS="${CFLAGS_X64}"
 export CXXFLAGS="${CFLAGS_X64}"
 export CROSSCFLAGS="${CROSSCFLAGS_X64}"
 export CROSSCXXFLAGS="${CROSSCFLAGS_X64}"
-rm -rf "${BUILD_DIR}"/Makefile
-pwd
-ls -la
-echo "[GABITEST] path de .."
-ls -la ..
-echo "[GABITEST] path de ../wine"
-ls -la ../wine
-/home/runner/work/Wine-DarkOS-Builds/Wine-DarkOS-Builds/wine/wine/configure --enable-archs=i386,x86_64 ${WINE_BUILD_OPTIONS} --prefix "${BUILD_DIR}"/wine-protonGE-amd64
+rm -rf "${BUILD_DIR}"/build
+mkdir build && cd build
+${BWRAP64} "${BUILD_DIR}"wine/configure --enable-archs=i386,x86_64 ${WINE_BUILD_OPTIONS} --prefix "${BUILD_DIR}"/wine-protonGE-amd64
 ${BWRAP64} make -j8
 ${BWRAP64} make install
 
