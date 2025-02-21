@@ -271,7 +271,7 @@ export CXXFLAGS="${CFLAGS_X64}"
 export CROSSCFLAGS="${CROSSCFLAGS_X64}"
 export CROSSCXXFLAGS="${CROSSCFLAGS_X64}"
 rm -rf "${BUILD_DIR}"/Makefile
-${BWRAP64} "${BUILD_DIR}"/../wine/configure --enable-archs=i386,x86_64 ${WINE_BUILD_OPTIONS} --prefix "${BUILD_DIR}"/wine-protonGE-amd64
+${BWRAP64} /home/runner/work/Wine-DarkOS-Builds/Wine-DarkOS-Builds/wine/wine/configure --enable-archs=i386,x86_64 ${WINE_BUILD_OPTIONS} --prefix "${BUILD_DIR}"/wine-protonGE-amd64
 ${BWRAP64} make -j8
 ${BWRAP64} make install
 
