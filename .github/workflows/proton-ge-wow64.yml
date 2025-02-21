@@ -25,6 +25,7 @@ jobs:
           workflow: bootstrap_wow64.yml
           workflow_conclusion: success
           path: /opt
+      - uses: actions/checkout@v3
       - name: Download artifact proton
         id: download-artifact-proton
         uses: dawidd6/action-download-artifact@v2
@@ -32,12 +33,13 @@ jobs:
         with:
           workflow: proton-ge-init.yml
           workflow_conclusion: success
-          path: /home/runner/work/Wine-DarkOS-Builds/Wine-DarkOS-Builds/
-      - uses: actions/checkout@v3
+          path: ~/work/Wine-DarkOS-Builds/Wine-DarkOS-Builds/
       - name: Build Wine
         run: |
-          ls -la
-          pwd
+          sudo apt update &>/dev/null
+          sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf automake libtool &>/dev/null
+          sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz" &>/dev/null
+          mv "PROTON-GE SRC WoW64" wine
           cd wine
           cp ../proton-GE-drivepatch.patch ./wine-staging/patches/ntdll-ext4-case-folder/0002-ntdll-server-Mark-drive_c-as-case-insensitive-when-c.patch
           cp ../protonprep-valve-staging.sh ./patches/protonprep-valve-staging.sh
