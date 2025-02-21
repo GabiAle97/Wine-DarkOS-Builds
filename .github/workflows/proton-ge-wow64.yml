@@ -42,6 +42,10 @@ jobs:
           mv "PROTON-GE SRC WoW64" wine
           sudo chmod -R +x wine
           cd wine
+          git init
+          git remote add origin http://github.com/gloriouseggroll/proton-ge-custom
+          git fetch origin
+          git reset --hard origin/master
           cp ../proton-GE-drivepatch.patch ./wine-staging/patches/ntdll-ext4-case-folder/0002-ntdll-server-Mark-drive_c-as-case-insensitive-when-c.patch
           cp ../protonprep-valve-staging.sh ./patches/protonprep-valve-staging.sh
           mkdir ./patches/termux-patches
