@@ -226,10 +226,7 @@ dlls/winevulkan/make_vulkan
 tools/make_requests
 tools/make_specfiles
 autoreconf -f
-pwd
-ls -la
 cd "${BUILD_DIR}" || exit 1
-pwd
 
 if [ "${DO_NOT_COMPILE}" = "true" ]; then
 	clear
@@ -275,7 +272,7 @@ export CROSSCFLAGS="${CROSSCFLAGS_X64}"
 export CROSSCXXFLAGS="${CROSSCFLAGS_X64}"
 rm -rf "${BUILD_DIR}"/build
 mkdir build && cd build
-${BWRAP64} "${BUILD_DIR}"wine/configure --enable-archs=i386,x86_64 ${WINE_BUILD_OPTIONS} --prefix "${BUILD_DIR}"/wine-protonGE-amd64
+${BWRAP64} "${BUILD_DIR}"/wine/configure --enable-archs=i386,x86_64 ${WINE_BUILD_OPTIONS} --prefix "${BUILD_DIR}"/wine-protonGE-amd64
 ${BWRAP64} make -j8
 ${BWRAP64} make install
 
