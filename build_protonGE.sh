@@ -226,10 +226,7 @@ dlls/winevulkan/make_vulkan
 tools/make_requests
 tools/make_specfiles
 autoreconf -f
-pwd
-ls -la
 cd "${BUILD_DIR}" || exit 1
-pwd
 
 if [ "${DO_NOT_COMPILE}" = "true" ]; then
 	clear
