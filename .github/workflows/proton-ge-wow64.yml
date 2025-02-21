@@ -40,6 +40,7 @@ jobs:
           sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf automake libtool &>/dev/null
           sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz" &>/dev/null
           mv "PROTON-GE SRC WoW64" wine
+          sudo chmod -R +x wine
           cd wine
           cp ../proton-GE-drivepatch.patch ./wine-staging/patches/ntdll-ext4-case-folder/0002-ntdll-server-Mark-drive_c-as-case-insensitive-when-c.patch
           cp ../protonprep-valve-staging.sh ./patches/protonprep-valve-staging.sh
@@ -50,7 +51,7 @@ jobs:
           cp ../wine-virtual-memory-proton.patch patches/termux-patches          
           cp ../esync-GE.patch patches/termux-patches
           sudo chmod +x -R ./patches/termux-patches
-          chmod +x ./patches/protonprep-valve-staging.sh
+          sudo chmod +x ./patches/protonprep-valve-staging.sh
           ./patches/protonprep-valve-staging.sh
           sed -i 's/tar.gz/tar.xz/' ./Makefile.in
           sed -i 's/tar -cvzf $(BUILD_NAME).tar.xz $(BUILD_NAME)/tar -cvzf \$\(BUILD_NAME\).tar.xz \$\(BUILD_NAME\)\/*/' ./Makefile.in
