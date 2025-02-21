@@ -33,7 +33,7 @@ jobs:
         with:
           workflow: proton-ge-init.yml
           workflow_conclusion: success
-          path: ~/work/Wine-DarkOS-Builds/Wine-DarkOS-Builds/
+          path: ./
       - name: Build Wine
         run: |
           sudo apt update &>/dev/null
