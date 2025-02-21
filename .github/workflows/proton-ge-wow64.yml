@@ -39,7 +39,7 @@ jobs:
           sudo apt update &>/dev/null
           sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf automake libtool &>/dev/null
           sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz" &>/dev/null
-          mv "PROTON-GE SRC WoW64" wine
+          ls -la
           cd wine
           cp ../proton-GE-drivepatch.patch ./wine-staging/patches/ntdll-ext4-case-folder/0002-ntdll-server-Mark-drive_c-as-case-insensitive-when-c.patch
           cp ../protonprep-valve-staging.sh ./patches/protonprep-valve-staging.sh
