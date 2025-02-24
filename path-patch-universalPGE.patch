@@ -71,7 +71,7 @@ diff --git a/dlls/ntdll/unix/server.c b/dlls/ntdll/unix/server.c
 index f3ffd99..e6926b6 100644
 --- a/dlls/ntdll/unix/server.c
 +++ b/dlls/ntdll/unix/server.c
-@@ -1275,12 +1295,34 @@ static const char *init_server_dir( dev_t dev, ino_t ino )
+@@ -1275,7 +1295,7 @@ static const char *init_server_dir( dev_t dev, ino_t ino )
  #ifdef __ANDROID__  /* there's no /tmp dir on Android */
      asprintf( &dir, "%s/.wineserver/server-%s", config_dir, tmp );
  #else
@@ -80,33 +80,6 @@ index f3ffd99..e6926b6 100644
  #endif
      return dir;
  }
- 
- 
-+/***********************************************************************
-+ *           set_case_insensitive
-+ *
-+ * Make the supplied directory case insensitive, if available.
-+ */
-+static void set_case_insensitive(const char *dir)
-+{
-+#if defined(EXT2_IOC_GETFLAGS) && defined(EXT2_IOC_SETFLAGS) && defined(EXT4_CASEFOLD_FL)
-+    int flags, fd;
-+
-+    if ((fd = open(dir, O_RDONLY | O_NONBLOCK | O_LARGEFILE)) == -1)
-+        return;
-+    if (ioctl(fd, EXT2_IOC_GETFLAGS, &flags) != -1 && !(flags & EXT4_CASEFOLD_FL))
-+    {
-+        flags |= EXT4_CASEFOLD_FL;
-+        ioctl(fd, EXT2_IOC_SETFLAGS, &flags);
-+    }
-+    close(fd);
-+#endif
-+}
-+
-+
- /***********************************************************************
-  *           setup_config_dir
-  *
 diff --git a/programs/winemenubuilder/winemenubuilder.c b/programs/winemenubuilder/winemenubuilder.c
 index 36569fa..bf2b178 100644
 --- a/programs/winemenubuilder/winemenubuilder.c
