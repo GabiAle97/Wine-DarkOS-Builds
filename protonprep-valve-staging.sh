@@ -342,8 +342,6 @@
     patch -Np1 < ../patches/termux-patches/wine-virtual-memory-proton.patch
     echo "TERMUX: -CUSTOM- esync-GE.patch"
     patch -Np1 < ../patches/termux-patches/esync-GE.patch
-    echo "TERMUX: -CUSTOM- wine-cpu-topology-protonGE.patch"
-    patch -Np1 < ../patches/termux-patches/wine-cpu-topology-protonGE.patch
     echo "TERMUX: -CUSTOM- looserexceptionhandling_protonGE.patch"
     patch -Np1 < ../patches/termux-patches/looserexceptionhandling_protonGE.patch
     popd
