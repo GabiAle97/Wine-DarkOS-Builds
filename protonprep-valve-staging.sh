@@ -334,11 +334,20 @@
 
     echo "TERMUX: -CUSTOM- termux-wine-fix-protonge.patch"
     patch -Np1 < ../patches/termux-patches/termux-wine-fix-protonge.patch
-    echo "TERMUX: -CUSTOM- pathfix.patch"
-    patch -Np1 < ../patches/termux-patches/pathfix.patch
+    echo "TERMUX: -CUSTOM- path-patch-universal.patch"
+    patch -Np1 < ../patches/termux-patches/path-patch-universalPGE.patch
+    echo "TERMUX: -CUSTOM- ndis_proton.patch"
+    patch -Np1 < ../patches/termux-patches/ndis_proton.patch
+    echo "TERMUX: -CUSTOM- wine-virtual-memory-proton.patch"
+    patch -Np1 < ../patches/termux-patches/wine-virtual-memory-proton.patch
     echo "TERMUX: -CUSTOM- esync-GE.patch"
     patch -Np1 < ../patches/termux-patches/esync-GE.patch
+    echo "TERMUX: -CUSTOM- wine-cpu-topology-protonGE.patch"
+    patch -Np1 < ../patches/termux-patches/wine-cpu-topology-protonGE.patch
+    echo "TERMUX: -CUSTOM- looserexceptionhandling_protonGE.patch"
+    patch -Np1 < ../patches/termux-patches/looserexceptionhandling_protonGE.patch
     popd
+
 ### END PROTON-GE TERMUX CUSTOM PATCHES ###
 
 ### END WINE PATCHING ###
