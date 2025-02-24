@@ -334,8 +334,8 @@
 
     echo "TERMUX: -CUSTOM- termux-wine-fix-protonge.patch"
     patch -Np1 < ../patches/termux-patches/termux-wine-fix-protonge.patch
-    echo "TERMUX: -CUSTOM- path-patch-universalPGE.patch"
-    patch -Np1 < ../patches/termux-patches/path-patch-universalPGE.patch
+    echo "TERMUX: -CUSTOM- pathfix.patch"
+    patch -Np1 < ../patches/termux-patches/pathfix.patch
     echo "TERMUX: -CUSTOM- ndis_proton.patch"
     patch -Np1 < ../patches/termux-patches/ndis_proton.patch
     echo "TERMUX: -CUSTOM- wine-virtual-memory-proton.patch"
