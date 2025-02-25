@@ -257,7 +257,7 @@ fi
 
 # Replace the "latest" parameter with the actual latest Wine version
 if [ "${WINE_VERSION}" = "latest" ] || [ -z "${WINE_VERSION}" ]; then
-	WINE_VERSION="$(echo "$(wget -q -O - "https://raw.githubusercontent.com/wine-mirror/wine/master/VERSION" | tail -c +14) - 0.1" | bc)"
+	WINE_VERSION="$(echo "$(wget -q -O - "https://raw.githubusercontent.com/wine-mirror/wine/master/VERSION" | tail -c +14) - 0.2" | bc)"
 fi
 
 # Stable and Development versions have a different source code location
