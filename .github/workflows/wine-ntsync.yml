@@ -1,0 +1,31 @@
+name: Wine NTSYNC WOW64 CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download artifact
+        id: download-artifact
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: bootstrap_wow64.yml
+          workflow_conclusion: success
+          path: /opt
+      - name: Build Wine
+        run: |
+          sudo apt update
+          sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf
+          sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz"
+          chmod +x build_wine.sh
+          WINE_BRANCH=staging-tkg-ntsync ./build_wine_updated.sh
+          sha256sum *.tar.xz
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: STKG
+          files: |
+            ./wine-action-staging-tkg-ntsync.tar.xz
