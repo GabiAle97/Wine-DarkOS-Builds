@@ -365,7 +365,7 @@ else
 
         if [ "$TERMUX_GLIBC" = "true" ] && [ "$WINE_BRANCH" = "staging" ] && [ "${EXPERIMENTAL_WOW64}" = "true" ]; then
             STAGING_ARGS="--all -W ntdll-Syscall_Emulation"
-        elif [ "$TERMUX_GLIBC" = "true" ] && [ "$WINE_BRANCH" = "staging" ]; then
+        elif [ "$TERMUX_GLIBC" = "true" ] && [ "$WINE_BRANCH" = "staging-tkg-ntsync" ] && [ "${EXPERIMENTAL_WOW64}" = "true" ]; then
             STAGING_ARGS="--all -W ntdll-Syscall_Emulation"
         elif [ "$TERMUX_GLIBC" = "true" ] && [ "${WINE_BRANCH}" = "vanilla" ] && [ "${EXPERIMENTAL_WOW64}" = "true" ]; then
             STAGING_ARGS="eventfd_synchronization winecfg_Staging"
@@ -430,7 +430,7 @@ if [ "$TERMUX_GLIBC" = "true" ]; then
         exit 1
     }
     clear
-    elif [ "$WINE_BRANCH" = "staging-tkg" ]; then
+    elif [ "$WINE_BRANCH" = "staging-tkg" ] || [ "$WINE_BRANCH" = "staging-tkg-ntsync" ]; then
     echo "Applying esync patch"
     patch -d wine -Np1 < "${scriptdir}"/esync.patch && \
     echo "Applying address space patch"
@@ -493,7 +493,7 @@ git revert --no-commit 2bfe81e41f93ce75139e3a6a2d0b68eb2dcb8fa6 || {
         exit 1
     }
    clear
-elif [ "$WINE_BRANCH" = "staging" ] || [ "$WINE_BRANCH" = "staging-tkg" ]; then
+elif [ "$WINE_BRANCH" = "staging" ] || [ "$WINE_BRANCH" = "staging-tkg" ] || [ "$WINE_BRANCH" = "staging-tkg-ntsync" ]; then
 patch -p1 -R < "${scriptdir}"/inputbridgefix.patch || {
         echo "Error: Failed to revert one or two patches. Stopping."
         exit 1
@@ -508,7 +508,7 @@ patch -p1 < "${scriptdir}"/wine-cpu-topology-wine-9.22.patch || {
         exit 1
     }
    clear
-elif [ "$WINE_BRANCH" == "staging-tkg" ]; then
+elif [ "$WINE_BRANCH" == "staging-tkg" ] || [ "$WINE_BRANCH" = "staging-tkg-ntsync" ]; then
 patch -p1 < "${scriptdir}"/wine-cpu-topology-tkg.patch || {
         echo "Error: Failed to apply one or two patches. Stopping."
         exit 1
