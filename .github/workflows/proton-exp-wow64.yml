@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Download artifact
         id: download-artifact
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v3
         continue-on-error: true
         with:
           workflow: bootstrap_wow64.yml
