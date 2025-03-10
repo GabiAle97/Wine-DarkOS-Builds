@@ -12,7 +12,7 @@ jobs:
       - name: Download artifact
         id: download-artifact
         uses: dawidd6/action-download-artifact@v2
-        continue-on-error: true
+        continue-on-error: false
         with:
           workflow: bootstrap_wow64.yml
           workflow_conclusion: success
