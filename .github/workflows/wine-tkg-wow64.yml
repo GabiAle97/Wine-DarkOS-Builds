@@ -22,6 +22,8 @@ jobs:
           sudo apt update
           sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf
           sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz"
+          ls /opt/chroots/noble64_chroot
+          sleep 15
           chmod +x build_wine.sh
           export WINE_VERSION="$(echo "$(wget -q -O - "https://raw.githubusercontent.com/wine-mirror/wine/master/VERSION" | tail -c +14) - 0.1" | bc)"
           WINE_BRANCH=staging-tkg ./build_wine.sh
