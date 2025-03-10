@@ -19,9 +19,9 @@ jobs:
           path: /opt
       - name: Build Wine
         run: |
-          sudo apt update
-          sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf
+          ls -la /opt
           sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz"
+          ls -la /opt
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: STKG
