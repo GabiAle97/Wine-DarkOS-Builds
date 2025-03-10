@@ -20,8 +20,9 @@ jobs:
       - name: Build Wine
         run: |
           ls -la /opt
-          sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz"
-          ls -la /opt
+          cd "/opt/Bootstraps WoW64/"
+          sudo tar -xpf bootstraps_wow64.tar.xz"
+          ls -laR 
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: STKG
