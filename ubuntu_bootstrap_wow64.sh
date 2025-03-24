@@ -78,6 +78,7 @@ apt-get -y install nano
 apt-get -y install locales
 apt-get -y install wget
 apt-get -y install cmake
+apt-get -y install flex bison
 echo ru_RU.UTF_8 UTF-8 >> /etc/locale.gen
 echo en_US.UTF_8 UTF-8 >> /etc/locale.gen
 locale-gen
