@@ -668,6 +668,8 @@ fi
 
 export XZ_OPT="-9"
 mkdir results
+sudo chown -R $(whoami) wine-${BUILD_NAME}-amd64
+sudo chmod -R 777 wine-${BUILD_NAME}-amd64
 mv wine-${BUILD_NAME}-amd64 results/wine
 
 if [ -d "results/wine" ]; then
