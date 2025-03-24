@@ -25,7 +25,7 @@ jobs:
           chmod +x build_wine.sh
           export WINE_VERSION="$(wget -q -O - "https://raw.githubusercontent.com/wine-mirror/wine/master/VERSION" | tail -c +14)"
           WINE_BRANCH=staging-tkg ./build_wine.sh
-          cat config.log
+          cat /home/runner/build_wine/build64/config.log
           sha256sum *.tar.xz
       - uses: softprops/action-gh-release@v2
         with:
