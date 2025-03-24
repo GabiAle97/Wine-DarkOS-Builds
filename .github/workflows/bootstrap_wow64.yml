@@ -15,7 +15,7 @@ jobs:
       - name: Create bootstraps
         run: |
           sudo apt update
-          sudo apt install debootstrap perl
+          sudo apt install debootstrap perl wget
           chmod +x ubuntu_bootstrap_wow64.sh
           sudo ./ubuntu_bootstrap_wow64.sh
           cd /opt
