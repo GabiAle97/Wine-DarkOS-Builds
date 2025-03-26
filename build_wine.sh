@@ -395,6 +395,14 @@ fi
     STAGING_ARGS="eventfd_synchronization winecfg_Staging"
    elif [ "$TERMUX_GLIBC" = "true" ] && [ "${WINE_BRANCH}" = "vanilla" ]; then
     STAGING_ARGS="eventfd_synchronization winecfg_Staging"
+   elif [ "$TERMUX_PROOT" = "true" ] && [ "${WINE_BRANCH}" = "vanilla" ]; then
+    STAGING_ARGS="eventfd_synchronization winecfg_Staging"
+   elif [ "$TERMUX_PROOT" = "true" ] && [ "${WINE_BRANCH}" = "staging" ]; then
+    STAGING_ARGS="--all -W ntdll-Syscall_Emulation"
+   elif [ "$TERMUX_PROOT" = "true" ] && [ "$WINE_BRANCH" = "staging" ] && [ "${EXPERIMENTAL_WOW64}" = "true" ]; then
+    STAGING_ARGS="--all -W ntdll-Syscall_Emulation"
+   elif [ "$TERMUX_PROOT" = "true" ] && [ "$WINE_BRANCH" = "vanilla" ] && [ "${EXPERIMENTAL_WOW64}" = "true" ]; then
+    STAGING_ARGS="eventfd_synchronization winecfg_Staging"
     fi
 
 		cd wine || exit 1
