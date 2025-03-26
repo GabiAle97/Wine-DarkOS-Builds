@@ -98,9 +98,6 @@ export WINE_BUILD_OPTIONS="--disable-winemenubuilder --disable-win16 --enable-wi
 # This directory is removed and recreated on each script run.
 export BUILD_DIR="${HOME}"/build_wine
 
-echo "$WINE_BRANCH"
-echo "$PROTON_BRANCH"
-
 # Implement a new WoW64 specific check which will change the way Wine is built.
 # New WoW64 builds will use a different bootstrap which require different
 # variables and they are not compatible with old WoW64 build mode.
@@ -110,8 +107,8 @@ if [ "${EXPERIMENTAL_WOW64}" = "true" ]; then
 
    export scriptdir="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 
-   export CC="gcc-14"
-   export CXX="g++-14"
+   export CC="gcc-15"
+   export CXX="g++-15"
    
    export CROSSCC_X64="x86_64-w64-mingw32-gcc"
    export CROSSCXX_X64="x86_64-w64-mingw32-g++"
