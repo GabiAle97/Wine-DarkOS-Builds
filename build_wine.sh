@@ -664,7 +664,7 @@ echo "Compilation complete"
 echo "Creating and compressing archives..."
 
 cd "${BUILD_DIR}" || exit
-${scriptdir}
+
 if touch "${scriptdir}"/write_test; then
 	rm -f "${scriptdir}"/write_test
 	result_dir="${scriptdir}"
