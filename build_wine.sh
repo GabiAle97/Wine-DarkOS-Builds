@@ -497,8 +497,8 @@ if [ "$TERMUX_GLIBC" = "true" ]; then
             patch -d wine -Np1 < "${scriptdir}"/pathfix-wine9.5.patch || {
             echo "Error: Failed to apply one or more patches."
             exit 1
-        fi
     }
+    fi
     clear 
 fi
 fi
