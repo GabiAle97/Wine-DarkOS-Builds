@@ -568,6 +568,7 @@ if [ "$WINE_BRANCH" = "proton" ]; then
 	    exit 1
     }
     clear
+    fi
 #else
 #echo "Applying additional address space patch... (credits to Bylaws)"
 #patch -p1 < "${scriptdir}"/wine-virtual-memory.patch || {
