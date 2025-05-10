@@ -520,6 +520,7 @@ else
         exit 1
     }
     clear
+    fi
 fi
 
 if [ ! -d wine ]; then
