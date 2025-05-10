@@ -321,7 +321,7 @@ elif [ "$WINE_BRANCH" = "proton" ]; then
 		patch -d wine -Np1 < "${scriptdir}"/proton-exp-8.0.patch
 	fi
 
-	if [ "${PROTON_BRANCH}" = "experimental_9.0" ] || [ "${PROTON_BRANCH}" = "bleeding-edge" ]; then
+	if [ "${PROTON_BRANCH}" = "experimental_9.0" ] || [ "${PROTON_BRANCH}" = "bleeding-edge" ] || [ "${PROTON_BRANCH}" = "experimental_10.0" ]; then
 	 patch -d wine -Np1 < "${scriptdir}"/proton-exp-9.0.patch
 	fi
 
