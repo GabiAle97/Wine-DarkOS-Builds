@@ -475,14 +475,14 @@ if [ "$TERMUX_GLIBC" = "true" ]; then
     }
     clear 
     elif [ "$WINE_BRANCH" = "proton" ]; then
-        if [ "${PROTON_BRANCH}" = "experimental_10.0" ] || [ "${PROTON_BRANCH}" = "bleeding-edge" ]; then
+        if [ "${PROTON_BRANCH}" = "proton_10.0" ] || [ "${PROTON_BRANCH}" = "experimental_10.0" ] || [ "${PROTON_BRANCH}" = "bleeding-edge" ]; then
             echo "Applying esync patch"
             patch -d wine -Np1 < "${scriptdir}"/patches_termux/esync-p10.patch && \
             echo "Applying address space patch"
             patch -d wine -Np1 < "${scriptdir}"/patches_termux/termux-p10.patch && \
             echo "Applying path change patch"
-            patch -d wine -Np1 < "${scriptdir}"/patches_termux/patch-avcodec.patch && \
-            echo "Applying avcodec patch"
+            #patch -d wine -Np1 < "${scriptdir}"/patches_termux/patch-avcodec.patch && \
+            #echo "Applying avcodec patch"
             ## Proton is based on Wine 9.0 stable release so some of the updates
             ## for patches are not required.
             patch -d wine -Np1 < "${scriptdir}"/patches_termux/pathfix-p10.patch || {
