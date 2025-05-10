@@ -505,23 +505,23 @@ fi
 fi
     
 # NDIS patch for fixing crappy Android's SELinux limitations.
-if [ "$WINE_BRANCH" != "proton" ]; then
-echo "Circumventing crappy SELinux's limitations... (Thanks BrunoSX)"
-patch -d wine -Np1 < "${scriptdir}"/ndis.patch || {
-        echo "Error: Failed to apply one or more patches."
-        exit 1
-    }
-    clear
-else
-    if [ "${PROTON_BRANCH}" = "experimental_10.0" ] || [ "${PROTON_BRANCH}" = "bleeding-edge" ] ; then
-        echo "Circumventing crappy SELinux's limitations... (Thanks BrunoSX)"
-        patch -d wine -Np1 < "${scriptdir}"/patches_termux/ndis-p10.patch || {
-        echo "Error: Failed to apply one or more patches."
-        exit 1
-    }
-    clear
-    fi
-fi
+#if [ "$WINE_BRANCH" != "proton" ]; then
+#echo "Circumventing crappy SELinux's limitations... (Thanks BrunoSX)"
+#patch -d wine -Np1 < "${scriptdir}"/ndis.patch || {
+#        echo "Error: Failed to apply one or more patches."
+#        exit 1
+#    }
+#    clear
+#else
+#    if [ "${PROTON_BRANCH}" = "experimental_10.0" ] || [ "${PROTON_BRANCH}" = "bleeding-edge" ] ; then
+#        echo "Circumventing crappy SELinux's limitations... (Thanks BrunoSX)"
+#        patch -d wine -Np1 < "${scriptdir}"/patches_termux/ndis-p10.patch || {
+#        echo "Error: Failed to apply one or more patches."
+#        exit 1
+#    }
+#    clear
+#    fi
+#fi
 
 if [ ! -d wine ]; then
 	clear
@@ -561,15 +561,15 @@ patch -p1 < "${scriptdir}"/wine-cpu-topology-tkg.patch || {
 fi
 
 ## Experimental addition to address space hackery
-if [ "$WINE_BRANCH" = "proton" ]; then
-    if [ "${PROTON_BRANCH}" = "experimental_10.0" ] || [ "${PROTON_BRANCH}" = "bleeding-edge" ] ; then
-        echo "Applying additional address space patch... (credits to Bylaws)"
-        patch -p1 < "${scriptdir}"/patches_termux/wine-virtual-memory-p10.patch || {
-        echo "This patch did not apply. Stopping..."
-	    exit 1
-    }
-    clear
-    fi
+#if [ "$WINE_BRANCH" = "proton" ]; then
+#    if [ "${PROTON_BRANCH}" = "experimental_10.0" ] || [ "${PROTON_BRANCH}" = "bleeding-edge" ] ; then
+#        echo "Applying additional address space patch... (credits to Bylaws)"
+#        patch -p1 < "${scriptdir}"/patches_termux/wine-virtual-memory-p10.patch || {
+#        echo "This patch did not apply. Stopping..."
+#	    exit 1
+#    }
+#    clear
+#    fi
 #else
 #echo "Applying additional address space patch... (credits to Bylaws)"
 #patch -p1 < "${scriptdir}"/wine-virtual-memory.patch || {
@@ -577,7 +577,7 @@ if [ "$WINE_BRANCH" = "proton" ]; then
 #	exit 1
 #    }
 #    clear
-fi
+#fi
 
 ###
 dlls/winevulkan/make_vulkan
