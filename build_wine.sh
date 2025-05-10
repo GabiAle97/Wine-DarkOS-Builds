@@ -486,6 +486,7 @@ if [ "$TERMUX_GLIBC" = "true" ]; then
             patch -d wine -Np1 < "${scriptdir}"/patches_termux/pathfix-p10.patch || {
             echo "Error: Failed to apply one or more patches."
             exit 1
+            }
         else
             echo "Applying esync patch"
             patch -d wine -Np1 < "${scriptdir}"/esync.patch && \
