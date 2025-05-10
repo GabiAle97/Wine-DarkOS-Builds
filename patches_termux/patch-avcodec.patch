@@ -1,0 +1,23 @@
+diff --git a/dlls/winedmo/libavcodec/pcm_byte_order_reverse_bsf.c b/dlls/winedmo/libavcodec/pcm_byte_order_reverse_bsf.c
+index 2237b1eaa84..d015ca56259 100644
+--- a/dlls/winedmo/libavcodec/pcm_byte_order_reverse_bsf.c
++++ b/dlls/winedmo/libavcodec/pcm_byte_order_reverse_bsf.c
+@@ -28,15 +28,15 @@
+ 
+ #define IS_EMPTY(pkt) (!(pkt)->data && !(pkt)->side_data_elems)
+ 
+-struct AVBSFInternal {
++typedef struct PCMByteOrderReverseBSFContext {
+     AVPacket *buffer_pkt;
+     int eof;
+-};
++} PCMByteOrderReverseBSFContext;
+ 
+ /* From FFmpeg */
+ int ff_bsf_get_packet(AVBSFContext *ctx, AVPacket **pkt)
+ {
+-    AVBSFInternal *bsfi = ctx->internal;
++    PCMByteOrderReverseBSFContext *bsfi = ctx->internal;
+     AVPacket *tmp_pkt;
+ 
+     if (bsfi->eof)

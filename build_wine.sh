@@ -481,6 +481,8 @@ if [ "$TERMUX_GLIBC" = "true" ]; then
             echo "Applying address space patch"
             patch -d wine -Np1 < "${scriptdir}"/patches_termux/termux-p10.patch && \
             echo "Applying path change patch"
+            patch -d wine -Np1 < "${scriptdir}"/patches_termux/patch-avcodec.path && \
+            echo "Applying avcodec patch"
             ## Proton is based on Wine 9.0 stable release so some of the updates
             ## for patches are not required.
             patch -d wine -Np1 < "${scriptdir}"/patches_termux/pathfix-p10.patch || {
