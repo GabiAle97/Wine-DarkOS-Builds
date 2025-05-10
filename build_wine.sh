@@ -475,7 +475,7 @@ if [ "$TERMUX_GLIBC" = "true" ]; then
     }
     clear 
     elif [ "$WINE_BRANCH" = "proton" ]; then
-        if [ "${PROTON_BRANCH}" != "experimental_10.0" ] && [ "${PROTON_BRANCH}" != "bleeding-edge" ]; then
+        if [ "${PROTON_BRANCH}" = "experimental_10.0" ] || [ "${PROTON_BRANCH}" = "bleeding-edge" ]; then
             echo "Applying esync patch"
             patch -d wine -Np1 < "${scriptdir}"/patches_termux/esync-p10.patch && \
             echo "Applying address space patch"
