@@ -321,8 +321,8 @@ elif [ "$WINE_BRANCH" = "proton" ]; then
 		patch -d wine -Np1 < "${scriptdir}"/proton-exp-8.0.patch
 	fi
 
-	if [ "${PROTON_BRANCH}" = "experimental_9.0" ] || [ "${PROTON_BRANCH}" = "bleeding-edge" ] || [ "${PROTON_BRANCH}" = "experimental_10.0" ]; then
-	 patch -d wine -Np1 < "${scriptdir}"/proton-exp-9.0.patch
+	if [ "${PROTON_BRANCH}" = "experimental_9.0" ]; then
+	    patch -d wine -Np1 < "${scriptdir}"/proton-exp-9.0.patch
 	fi
 
 
@@ -475,16 +475,29 @@ if [ "$TERMUX_GLIBC" = "true" ]; then
     }
     clear 
     elif [ "$WINE_BRANCH" = "proton" ]; then
-    echo "Applying esync patch"
-    patch -d wine -Np1 < "${scriptdir}"/esync.patch && \
-    echo "Applying address space patch"
-    patch -d wine -Np1 < "${scriptdir}"/termux-wine-fix.patch && \
-    echo "Applying path change patch"
-    ## Proton is based on Wine 9.0 stable release so some of the updates
-    ## for patches are not required.
-    patch -d wine -Np1 < "${scriptdir}"/pathfix-wine9.5.patch || {
-        echo "Error: Failed to apply one or more patches."
-        exit 1
+        if [ "${PROTON_BRANCH}" != "experimental_10.0" ] && [ "${PROTON_BRANCH}" != "bleeding-edge" ] ; then
+            echo "Applying esync patch"
+            patch -d wine -Np1 < "${scriptdir}"/patches_termux/esync-p10.patch && \
+            echo "Applying address space patch"
+            patch -d wine -Np1 < "${scriptdir}"/patches_termux/termux-p10.patch && \
+            echo "Applying path change patch"
+            ## Proton is based on Wine 9.0 stable release so some of the updates
+            ## for patches are not required.
+            patch -d wine -Np1 < "${scriptdir}"/patches_termux/pathfix-p10.patch || {
+            echo "Error: Failed to apply one or more patches."
+            exit 1
+        else
+            echo "Applying esync patch"
+            patch -d wine -Np1 < "${scriptdir}"/esync.patch && \
+            echo "Applying address space patch"
+            patch -d wine -Np1 < "${scriptdir}"/termux-wine-fix.patch && \
+            echo "Applying path change patch"
+            ## Proton is based on Wine 9.0 stable release so some of the updates
+            ## for patches are not required.
+            patch -d wine -Np1 < "${scriptdir}"/pathfix-wine9.5.patch || {
+            echo "Error: Failed to apply one or more patches."
+            exit 1
+        fi
     }
     clear 
 fi
@@ -498,13 +511,14 @@ patch -d wine -Np1 < "${scriptdir}"/ndis.patch || {
         exit 1
     }
     clear
-#else
-#echo "Circumventing crappy SELinux's limitations... (Thanks BrunoSX)"
-#patch -d wine -Np1 < "${scriptdir}"/ndis_proton.patch || {
-#        echo "Error: Failed to apply one or more patches."
-#        exit 1
-#    }
-#    clear
+else
+    if [ "${PROTON_BRANCH}" = "experimental_10.0" ] || [ "${PROTON_BRANCH}" = "bleeding-edge" ] ; then
+        echo "Circumventing crappy SELinux's limitations... (Thanks BrunoSX)"
+        patch -d wine -Np1 < "${scriptdir}"/patches_termux/ndis-p10.patch || {
+        echo "Error: Failed to apply one or more patches."
+        exit 1
+    }
+    clear
 fi
 
 if [ ! -d wine ]; then
@@ -544,14 +558,15 @@ patch -p1 < "${scriptdir}"/wine-cpu-topology-tkg.patch || {
     }
 fi
 
-### Experimental addition to address space hackery
-#if [ "$WINE_BRANCH" = "proton" ]; then
-#echo "Applying additional address space patch... (credits to Bylaws)"
-#patch -p1 < "${scriptdir}"/wine-virtual-memory-proton.patch || {
-#        echo "This patch did not apply. Stopping..."
-#	exit 1
-#    }
-#    clear
+## Experimental addition to address space hackery
+if [ "$WINE_BRANCH" = "proton" ]; then
+    if [ "${PROTON_BRANCH}" = "experimental_10.0" ] || [ "${PROTON_BRANCH}" = "bleeding-edge" ] ; then
+        echo "Applying additional address space patch... (credits to Bylaws)"
+        patch -p1 < "${scriptdir}"/patches_termux/wine-virtual-memory-p10.patch || {
+        echo "This patch did not apply. Stopping..."
+	    exit 1
+    }
+    clear
 #else
 #echo "Applying additional address space patch... (credits to Bylaws)"
 #patch -p1 < "${scriptdir}"/wine-virtual-memory.patch || {
@@ -559,7 +574,7 @@ fi
 #	exit 1
 #    }
 #    clear
-#fi
+fi
 
 ###
 dlls/winevulkan/make_vulkan
