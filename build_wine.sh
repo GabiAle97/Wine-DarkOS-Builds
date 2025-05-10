@@ -498,13 +498,13 @@ patch -d wine -Np1 < "${scriptdir}"/ndis.patch || {
         exit 1
     }
     clear
-else
-echo "Circumventing crappy SELinux's limitations... (Thanks BrunoSX)"
-patch -d wine -Np1 < "${scriptdir}"/ndis_proton.patch || {
-        echo "Error: Failed to apply one or more patches."
-        exit 1
-    }
-    clear
+#else
+#echo "Circumventing crappy SELinux's limitations... (Thanks BrunoSX)"
+#patch -d wine -Np1 < "${scriptdir}"/ndis_proton.patch || {
+#        echo "Error: Failed to apply one or more patches."
+#        exit 1
+#    }
+#    clear
 fi
 
 if [ ! -d wine ]; then
