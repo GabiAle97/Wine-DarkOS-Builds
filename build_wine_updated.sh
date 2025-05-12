@@ -107,7 +107,7 @@ echo "$PROTON_BRANCH"
 # variables and they are not compatible with old WoW64 build mode.
 if [ "${EXPERIMENTAL_WOW64}" = "true" ]; then
 
-   export BOOTSTRAP_X64=/opt/chroots/noble64_chroot
+   export BOOTSTRAP_X64=/opt/chroots/jammy64_chroot
 
    export scriptdir="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 
