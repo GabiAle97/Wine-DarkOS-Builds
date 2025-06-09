@@ -4,7 +4,8 @@ index 2237b1eaa84..00fc983e2b5 100644
 +++ b/dlls/winedmo/libavcodec/pcm_byte_order_reverse_bsf.c
 @@ -28,15 +28,15 @@
  
- #define IS_EMPTY(pkt) (!(pkt)->data && !(pkt)->side_data_elems)
+-#define IS_EMPTY(pkt) (!(pkt)->data && !(pkt)->side_data_elems)
++#define IS_EMPTY(pkt) (!(pkt) || !(pkt)->data && !(pkt)->side_data_elems)
  
 -struct AVBSFInternal {
 +typedef struct PCMByteOrderReverseBSFContext {
@@ -14,14 +15,27 @@ index 2237b1eaa84..00fc983e2b5 100644
 +} PCMByteOrderReverseBSFContext;
  
  /* From FFmpeg */
- int ff_bsf_get_packet(AVBSFContext *ctx, AVPacket **pkt)
+-int ff_bsf_get_packet(AVBSFContext *ctx, AVPacket **pkt)
++int ff_bsf_get_packet(AVBSFContext *ctx, AVPacket *pkt)
  {
 -    AVBSFInternal *bsfi = ctx->internal;
 +    PCMByteOrderReverseBSFContext *bsfi = ctx->priv_data;
      AVPacket *tmp_pkt;
  
      if (bsfi->eof)
-@@ -77,7 +77,7 @@ static enum AVCodecID reverse_codec_id(enum AVCodecID codec_id)
+@@ -45,7 +45,8 @@ int ff_bsf_get_packet(AVBSFContext *ctx, AVPacket **pkt)
+         return AVERROR_EOF;
+ 
+     if (IS_EMPTY(bsfi->buffer_pkt))
+         return AVERROR(EAGAIN);
+ 
+-    *pkt = bsfi->buffer_pkt;
++    av_packet_move_ref(pkt, bsfi->buffer_pkt);
++    av_packet_unref(bsfi->buffer_pkt);
+ 
+     return 0;
+ }
+@@ -77,7 +78,7 @@ static enum AVCodecID reverse_codec_id(enum AVCodecID codec_id)
  
  static int init(AVBSFContext *ctx)
  {
@@ -30,3 +44,10 @@ index 2237b1eaa84..00fc983e2b5 100644
          return AVERROR(EINVAL);
      if (ctx->par_in->bits_per_coded_sample % 8u)
          return AVERROR(EINVAL);
+@@ -150,7 +151,8 @@ const AVBitStreamFilter ff_pcm_byte_order_reverse_bsf = {
+     .name           = "pcm_byte_order_reverse",
+-    .filter         = byte_order_reverse_filter,
+-    .init           = init,
++    .priv_data_size = sizeof(PCMByteOrderReverseBSFContext),
++    .init           = NULL, // Adaptar según la nueva API
+ };
