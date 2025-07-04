@@ -22,7 +22,7 @@ jobs:
       - name: Build Proton
         run: |
           sudo apt update
-          sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf libdrm-dev
+          sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf
           sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz"
           chmod +x build_wine.sh
           WINE_BRANCH=proton PROTON_BRANCH=proton_10.0 ./build_wine.sh
