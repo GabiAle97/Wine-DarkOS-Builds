@@ -548,19 +548,19 @@ patch -p1 -R < "${scriptdir}"/inputbridgefix.patch || {
    clear
 fi
 
-echo "Applying CPU topology patch"
-if [ "$WINE_BRANCH" == "staging" ]; then
-patch -p1 < "${scriptdir}"/wine-cpu-topology-wine-9.22.patch || {
-        echo "Error: Failed to revert one or two patches. Stopping."
-        exit 1
-    }
-   clear
-elif [ "$WINE_BRANCH" == "staging-tkg" ]; then
-patch -p1 < "${scriptdir}"/wine-cpu-topology-tkg.patch || {
-        echo "Error: Failed to apply one or two patches. Stopping."
-        exit 1
-    }
-fi
+#echo "Applying CPU topology patch"
+#if [ "$WINE_BRANCH" == "staging" ]; then
+#patch -p1 < "${scriptdir}"/wine-cpu-topology-wine-9.22.patch || {
+#        echo "Error: Failed to revert one or two patches. Stopping."
+#        exit 1
+#    }
+#   clear
+#elif [ "$WINE_BRANCH" == "staging-tkg" ]; then
+#patch -p1 < "${scriptdir}"/wine-cpu-topology-tkg.patch || {
+#        echo "Error: Failed to apply one or two patches. Stopping."
+#        exit 1
+#    }
+#fi
 
 ## Experimental addition to address space hackery
 #if [ "$WINE_BRANCH" = "proton" ]; then
