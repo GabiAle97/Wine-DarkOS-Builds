@@ -21,9 +21,9 @@ jobs:
           path: /opt
       - name: Build Proton
         run: |
-          sudo dpkg --add-architecture i386
+          set -e
           sudo apt update
-          sudo apt install -y mingw-w64 gcc-multilib g++-multilib debootstrap perl git wget xz-utils bubblewrap autoconf
+          sudo apt install -y debootstrap perl git wget xz-utils bubblewrap autoconf
           sudo tar -C /opt -xpf "/opt/Bootstraps WoW64/bootstraps_wow64.tar.xz"
           chmod +x build_wine.sh
           export TERM=xterm
