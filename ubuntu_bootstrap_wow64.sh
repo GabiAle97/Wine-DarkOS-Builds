@@ -76,9 +76,6 @@ create_build_scripts () {
 apt-get update
 apt-get -y install nano
 apt-get -y install locales
-apt-get -y install wget
-apt-get -y install cmake
-apt-get -y install flex bison
 echo ru_RU.UTF_8 UTF-8 >> /etc/locale.gen
 echo en_US.UTF_8 UTF-8 >> /etc/locale.gen
 locale-gen
@@ -93,16 +90,13 @@ apt-get -y upgrade
 apt-get -y dist-upgrade
 apt-get -y install software-properties-common
 apt-get update
-apt-get -y install mesa-common-dev libgl1-mesa-dev
-apt-get -y install libgl-dev libglx-dev --allow-downgrades
-aptitude -y install libgl-dev libglx-dev
 apt-get -y build-dep wine-development libsdl2 libvulkan1
 apt-get -y install cmake flex bison ccache gcc-14 g++-14 wget git gcc-mingw-w64 g++-mingw-w64
 apt-get -y install libxpresent-dev libjxr-dev libusb-1.0-0-dev libgcrypt20-dev libpulse-dev libudev-dev libsane-dev libv4l-dev libkrb5-dev libgphoto2-dev liblcms2-dev libcapi20-dev
 apt-get -y install libjpeg62-dev samba-dev libfreetype-dev libunwind-dev ocl-icd-opencl-dev libgnutls28-dev libx11-dev libxcomposite-dev libxcursor-dev libxfixes-dev libxi-dev libxrandr-dev 
 apt-get -y install libxrender-dev libxext-dev libpcsclite-dev libcups2-dev libosmesa6-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
-apt-get -y install python3-pip libxcb-xkb-dev libfontconfig-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libswresample-dev libavfilter-dev
-apt-get -y install meson ninja-build libxml2 libxml2-dev libxkbcommon-dev libxkbcommon0 xkb-data libxxf86vm-dev libdrm-dev libdbus-1-dev
+apt-get -y install python3-pip libxcb-xkb-dev libfontconfig-dev libgl-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libswresample-dev libavfilter-dev
+apt-get -y install meson ninja-build libxml2 libxml2-dev libxkbcommon-dev libxkbcommon0 xkb-data libxxf86vm-dev libdbus-1-dev
 apt-get -y purge libvulkan-dev libvulkan1 libsdl2-dev libsdl2-2.0-0 libpcap0.8-dev libpcap0.8 --purge --autoremove
 apt-get -y clean
 apt-get -y autoclean
@@ -116,7 +110,7 @@ wget -O vulkan-headers.tar.gz https://github.com/KhronosGroup/Vulkan-Headers/arc
 wget -O spirv-headers.tar.gz https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/vulkan-sdk-1.3.283.0.tar.gz
 wget -O libpcap.tar.gz https://www.tcpdump.org/release/libpcap-${libpcap_version}.tar.gz
 wget -O libxkbcommon.tar.xz https://xkbcommon.org/download/libxkbcommon-${libxkbcommon_version}.tar.xz
-if [ -d /usr/lib/x86_64-linux-gnu ]; then wget -O wine.deb https://dl.winehq.org/wine-builds/ubuntu/dists/noble/main/binary-amd64/wine-stable_10.0.0.0~noble-1_amd64.deb; fi
+if [ -d /usr/lib/x86_64-linux-gnu ]; then wget -O wine.deb https://dl.winehq.org/wine-builds/ubuntu/dists/jammy/main/binary-amd64/wine-stable_9.0.0.0~jammy-1_amd64.deb; fi
 # VkD3D download script. Needs automation to be implemented
 wget -O vkd3d.tar.xz https://dl.winehq.org/vkd3d/source/vkd3d-1.11.tar.xz 
 tar xf vkd3d.tar.xz
